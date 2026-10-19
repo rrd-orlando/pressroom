@@ -27,7 +27,7 @@
 
   // Lets the phone install these pages as apps
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js?v=3').catch(function () {}); });
   }
 })();
 
