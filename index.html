@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Log Consumable</title>
+  <link rel="manifest" href="manifest-log.json">
+  <link rel="apple-touch-icon" href="icons/log-180.png">
+  <link rel="icon" type="image/png" href="icons/log-192.png">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Log">
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <style>
+    :root {
+      --navy: #22355e;
+      --text: #1f2937;
+      --label: #3d4a5c;
+      --muted: #6b7280;
+      --border: #d5dbe5;
+      --border-soft: #e4e8ef;
+      --panel: #f3f5f8;
+      --green: #458f46;
+      --green-dark: #3a7a3b;
+      --green-soft: #e9f4ea;
+      --amber: #b45309;
+      --amber-soft: #fff4e5;
+      --red: #c62828;
+      --red-soft: #fdecec;
+      --blue: #1d4ed8;
+      --blue-soft: #e8efff;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    html, body { margin: 0; background: #fff; color: var(--text); }
+
+    /* ---------- Layout: stacked on phone, side-by-side in the sheet popup ---------- */
+    .layout { display: flex; flex-direction: column; }
+    .form-col { padding: 22px 20px 26px; }
+    .inv-col  { background: var(--panel); border-top: 1px solid var(--border-soft); padding: 22px 20px 30px; min-height: 200px; }
+
+    @media (min-width: 720px) {
+      html, body { height: 100%; overflow: hidden; }
+      .layout { flex-direction: row; height: 100vh; }
+      .form-col { width: 380px; flex: none; overflow-y: auto; padding: 20px 22px; }
+      .inv-col  { flex: 1; border-top: 0; border-left: 1px solid var(--border-soft); display: flex; flex-direction: column; padding: 20px 20px 16px; min-width: 0; }
+      .inv-list { flex: 1; overflow-y: auto; padding-right: 4px; }
+    }
+
+    /* ---------- Header ---------- */
+    h1 { margin: 0; font-size: 26px; font-weight: 750; color: var(--navy); display: flex; align-items: center; gap: 10px; }
+    .sub { margin: 6px 0 20px; font-size: 15px; color: var(--muted); line-height: 1.4; }
+
+    /* ---------- Press switch ---------- */
+    .seg { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+    .seg button {
+      flex: 1; border: 0; background: #fff; padding: 12px 0; font-size: 16px; font-weight: 650;
+      color: var(--navy); cursor: pointer; transition: background .15s, color .15s;
+    }
+    .seg button + button { border-left: 1px solid var(--border); }
+    .seg button.active { background: var(--navy); color: #fff; }
+
+    /* ---------- Fields ---------- */
+    .field { margin-bottom: 18px; }
+    label { display: block; font-size: 12.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--label); margin-bottom: 8px; }
+    label span { text-transform: none; letter-spacing: .02em; font-weight: 400; color: var(--muted); }
+    select, input {
+      width: 100%; height: 50px; background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      color: var(--text); font-size: 16px; padding: 0 14px; outline: none;
+      transition: border-color .15s, box-shadow .15s; -webkit-appearance: none; appearance: none;
+    }
+    select {
+      padding-right: 38px; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='14' viewBox='0 0 10 14'%3E%3Cpath d='M1 5l4-4 4 4M1 9l4 4 4-4' stroke='%231f2937' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center;
+    }
+    select:focus, input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(34,53,94,.12); }
+
+    .stepper { display: flex; gap: 10px; }
+    .stepper button {
+      width: 56px; height: 50px; flex: none; border-radius: 12px; border: 1px solid var(--border);
+      background: #fff; color: var(--navy); font-size: 24px; line-height: 1; cursor: pointer;
+    }
+    .stepper button:active { background: var(--panel); }
+    .stepper input { text-align: center; font-size: 22px; font-weight: 700; }
+
+    .chosen { margin-top: 8px; font-size: 13.5px; color: var(--muted); min-height: 18px; }
+
+    .submit {
+      width: 100%; height: 56px; margin-top: 4px; border: 0; border-radius: 12px;
+      background: var(--green); color: #fff; font-size: 18px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px; transition: background .15s;
+    }
+    .submit:hover { background: var(--green-dark); }
+    .submit:disabled { background: #9cc39d; cursor: default; }
+    .spin { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.5); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; display: none; }
+    .busy .spin { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status { margin-top: 14px; padding: 11px 14px; border-radius: 12px; font-size: 14.5px; line-height: 1.35; display: none; }
+    .status.ok  { display: block; background: var(--green-soft); color: var(--green-dark); }
+    .status.err { display: block; background: var(--red-soft); color: var(--red); }
+
+    /* ---------- Inventory ---------- */
+    h2 { margin: 0; font-size: 21px; font-weight: 750; color: var(--navy); }
+    .inv-sum { margin: 6px 0 14px; font-size: 15px; color: var(--muted); }
+    .inv-sum b { font-weight: 650; }
+    .inv-sum .s-out { color: var(--red); }
+    .inv-sum .s-low { color: var(--amber); }
+    .filter { height: 44px; font-size: 15px; margin-bottom: 12px; }
+
+    .card {
+      display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--border-soft);
+      border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .card:hover { border-color: var(--border); box-shadow: 0 1px 4px rgba(16,24,40,.06); }
+    .card.selected { border-color: var(--navy); box-shadow: 0 0 0 2px rgba(34,53,94,.15); }
+    .card.flash { animation: flash 1.6s ease; }
+    @keyframes flash { 0%,40% { background: var(--green-soft); } 100% { background: #fff; } }
+    .c-main { flex: 1; min-width: 0; }
+    .c-name { font-size: 15.5px; font-weight: 650; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .c-meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .c-qty  { font-size: 22px; font-weight: 750; color: var(--text); min-width: 40px; text-align: right; }
+    .badge { font-size: 12px; font-weight: 650; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+    .b-ok  { background: var(--green-soft); color: var(--green-dark); }
+    .b-low { background: var(--amber-soft); color: var(--amber); }
+    .b-out { background: var(--red-soft); color: var(--red); }
+    .b-ord { background: var(--blue-soft); color: var(--blue); }
+    .empty { color: var(--muted); font-size: 14.5px; padding: 10px 2px; }
+
+    /* --- app feel --- */
+    html { -webkit-text-size-adjust: 100%; }
+    body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
+    button, .card, .seg button { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+
+    <!-- ===== Left / top: the log form ===== -->
+    <div class="form-col">
+      <h1>📦 Log consumable</h1>
+      <p class="sub" id="subtitle">Takes it off the inventory and adds a line to the LOG.</p>
+
+      <div class="seg">
+        <button type="button" id="btn-ls" class="active" onclick="setPress('640LS')">640LS</button>
+        <button type="button" id="btn-express" onclick="setPress('EXPRESS')">Express</button>
+      </div>
+
+      <div class="field">
+        <label for="itemSelect">Item</label>
+        <select id="itemSelect" onchange="onItemChanged()"><option value="" disabled selected>Loading…</option></select>
+        <div class="chosen" id="chosenInfo"></div>
+      </div>
+
+      <div class="field">
+        <label for="qtyInput">Quantity used</label>
+        <div class="stepper">
+          <button type="button" onclick="adjustQty(-1)" aria-label="Less">−</button>
+          <input type="text" id="qtyInput" value="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+          <button type="button" onclick="adjustQty(1)" aria-label="More">+</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="operSelect">Operator <span>(remembered on this device)</span></label>
+        <select id="operSelect" onchange="onOperatorSelected(this.value)">
+          <option value="" disabled selected>Select operator…</option>
+        </select>
+      </div>
+
+      <button type="button" id="submitBtn" class="submit" onclick="submitLog()">
+        <span class="spin"></span><span id="btnText">Log usage</span>
+      </button>
+      <div id="statusMsg" class="status"></div>
+    </div>
+
+    <!-- ===== Right / bottom: live inventory ===== -->
+    <div class="inv-col">
+      <h2>Inventory now</h2>
+      <p class="inv-sum" id="invSummary">Loading…</p>
+      <input type="text" id="filterInput" class="filter" placeholder="Search items…" oninput="renderInventory()" autocomplete="off">
+      <div class="inv-list" id="invList"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // In the sheet popup the server passes mode = 'dialog'. As a web app this stays false.
+    var IS_DIALOG = false;
+    var OPER_KEY = 'ls_pressroom_oper_initials';
+
+    var currentPress = '640LS';
+    var inventory = [];      // [{name, qty, min, ordered}]
+    var operatorList = [];
+    var lastLogged = '';
+
+    window.onload = function () { loadData(true); };
+
+    function loadData(first) {
+      google.script.run
+        .withSuccessHandler(function (data) { onDataLoaded(data, first); })
+        .withFailureHandler(function (err) {
+          document.getElementById('invSummary').textContent = 'Could not load inventory.';
+          showStatus('Could not load inventory: ' + errMsg(err), false);
+        })
+        .getConsumablesData();
+    }
+
+    function onDataLoaded(data, first) {
+      inventory = data.inventory || (data['640LS'] || []).map(function (n) { return { name: n, qty: null, min: null }; });
+      operatorList = data.operators || [];
+      if (first) {
+        setPress(data.defaultPress || '640LS');
+        renderOperatorDropdown();
+      } else {
+        var keep = document.getElementById('itemSelect').value;
+        renderItemDropdown();
+        if (keep) document.getElementById('itemSelect').value = keep;
+      }
+      renderInventory();
+      onItemChanged();
+    }
+
+    // ---------- Press switch ----------
+    function setPress(press) {
+      currentPress = press;
+      document.getElementById('btn-ls').classList.toggle('active', press === '640LS');
+      document.getElementById('btn-express').classList.toggle('active', press === 'EXPRESS');
+      document.getElementById('subtitle').textContent =
+        'Takes it off the inventory and adds a line to the ' + (press === 'EXPRESS' ? 'Express' : '640LS') + ' LOG.';
+      var keep = document.getElementById('itemSelect').value;
+      renderItemDropdown();
+      if (keep) document.getElementById('itemSelect').value = keep;
+    }
+
+    // ---------- Dropdowns ----------
+    function renderItemDropdown() {
+      var select = document.getElementById('itemSelect');
+      select.innerHTML = '<option value="" disabled selected>Select an item…</option>';
+      inventory.forEach(function (it) {
+        var opt = document.createElement('option');
+        opt.value = it.name; opt.textContent = it.name;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderOperatorDropdown() {
+      var select = document.getElementById('operSelect');
+      select.innerHTML = '<option value="" disabled selected>Select operator…</option>';
+      operatorList.forEach(function (op) {
+        var opt = document.createElement('option');
+        opt.value = op; opt.textContent = op;
+        select.appendChild(opt);
+      });
+      var saved = null;
+      try { saved = localStorage.getItem(OPER_KEY); } catch (e) {}
+      if (saved && operatorList.indexOf(saved) >= 0) select.value = saved;
+    }
+
+    function onOperatorSelected(val) { try { if (val) localStorage.setItem(OPER_KEY, val); } catch (e) {} }
+
+    function onItemChanged() {
+      var name = document.getElementById('itemSelect').value;
+      var it = findItem(name);
+      document.getElementById('chosenInfo').textContent =
+        (it && it.qty !== null) ? ('In stock: ' + it.qty + (it.min ? '  ·  Min: ' + it.min : '')) : '';
+      renderInventory();
+    }
+
+    function adjustQty(delta) {
+      var input = document.getElementById('qtyInput');
+      var val = parseInt(input.value, 10) || 1;
+      input.value = Math.max(1, val + delta);
+    }
+
+    // ---------- Inventory list ----------
+    function statusOf(it) {
+      if (it.qty === null) return null;
+      if (it.qty <= 0) return { cls: 'b-out', text: 'Out' };
+      if (it.min && it.qty < it.min) return it.ordered ? { cls: 'b-ord', text: 'Ordered' } : { cls: 'b-low', text: 'Low' };
+      return { cls: 'b-ok', text: 'OK' };
+    }
+
+    function renderInventory() {
+      var list = document.getElementById('invList');
+      var q = (document.getElementById('filterInput').value || '').trim().toUpperCase();
+      var selected = document.getElementById('itemSelect').value;
+
+      var outN = 0, lowN = 0;
+      inventory.forEach(function (it) {
+        var s = statusOf(it);
+        if (s && s.text === 'Out') outN++;
+        else if (s && (s.text === 'Low' || s.text === 'Ordered')) lowN++;
+      });
+      document.getElementById('invSummary').innerHTML =
+        inventory.length + ' items' +
+        (outN ? ' · <b class="s-out">' + outN + ' out</b>' : '') +
+        (lowN ? ' · <b class="s-low">' + lowN + ' low</b>' : '') +
+        (!outN && !lowN ? ' · all stocked' : '');
+
+      // Out and low items float to the top
+      var rank = { 'Out': 0, 'Low': 1, 'Ordered': 2, 'OK': 3 };
+      var rows = inventory
+        .filter(function (it) { return !q || it.name.toUpperCase().indexOf(q) >= 0; })
+        .slice()
+        .sort(function (a, b) {
+          var sa = statusOf(a), sb = statusOf(b);
+          return (sa ? rank[sa.text] : 9) - (sb ? rank[sb.text] : 9);
+        });
+
+      list.innerHTML = '';
+      if (!rows.length) { list.innerHTML = '<div class="empty">No items match.</div>'; return; }
+
+      rows.forEach(function (it) {
+        var s = statusOf(it);
+        var card = document.createElement('div');
+        card.className = 'card' + (it.name === selected ? ' selected' : '') + (it.name === lastLogged ? ' flash' : '');
+        card.onclick = function () { pickItem(it.name); };
+        card.innerHTML =
+          '<div class="c-main"><div class="c-name"></div><div class="c-meta"></div></div>' +
+          (s ? '<span class="badge ' + s.cls + '">' + s.text + '</span>' : '') +
+          '<div class="c-qty">' + (it.qty === null ? '' : it.qty) + '</div>';
+        card.querySelector('.c-name').textContent = it.name;
+        card.querySelector('.c-meta').textContent = it.min ? ('Min ' + it.min) : '';
+        list.appendChild(card);
+      });
+      lastLogged = '';
+    }
+
+    function pickItem(name) {
+      document.getElementById('itemSelect').value = name;
+      onItemChanged();
+      if (window.innerWidth < 720) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function findItem(name) {
+      for (var i = 0; i < inventory.length; i++) if (inventory[i].name === name) return inventory[i];
+      return null;
+    }
+
+    // ---------- Submit ----------
+    function setBusy(busy) {
+      var btn = document.getElementById('submitBtn');
+      btn.disabled = busy;
+      btn.classList.toggle('busy', busy);
+      document.getElementById('btnText').textContent = busy ? 'Logging…' : 'Log usage';
+    }
+
+    function submitLog() {
+      var item = document.getElementById('itemSelect').value;
+      var qty = parseInt(document.getElementById('qtyInput').value, 10);
+      var oper = document.getElementById('operSelect').value;
+
+      if (!item) { showStatus('Please select an item.', false); return; }
+      if (!qty || qty < 1) { showStatus('Quantity must be 1 or more.', false); return; }
+      if (!oper) { showStatus('Please select an operator.', false); return; }
+
+      setBusy(true);
+      showStatus('', null);
+
+      google.script.run
+        .withSuccessHandler(function (msg) {
+          setBusy(false);
+          showStatus(msg || 'Logged.', true);
+          document.getElementById('qtyInput').value = '1';
+          document.getElementById('itemSelect').value = '';
+          lastLogged = item;
+          loadData(false);   // refresh the inventory so the new count shows
+          if (IS_DIALOG) setTimeout(function () { google.script.host.close(); }, 2500);
+        })
+        .withFailureHandler(function (err) {
+          setBusy(false);
+          showStatus('Not logged: ' + errMsg(err), false);
+        })
+        .submitConsumableUsage({ press: currentPress, item: item, qty: qty, oper: oper });
+    }
+
+    function errMsg(err) { return (err && err.message) ? err.message : String(err); }
+
+    function showStatus(msg, ok) {
+      var div = document.getElementById('statusMsg');
+      div.textContent = msg;
+      div.className = 'status' + (msg ? (ok ? ' ok' : ' err') : '');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Consumable Orders</title>
+  <link rel="manifest" href="manifest-orders.json">
+  <link rel="apple-touch-icon" href="icons/orders-180.png">
+  <link rel="icon" type="image/png" href="icons/orders-192.png">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Orders">
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <style>
+    :root {
+      --navy: #22355e; --text: #1f2937; --label: #3d4a5c; --muted: #6b7280;
+      --border: #d5dbe5; --border-soft: #e4e8ef; --panel: #f3f5f8;
+      --green: #458f46; --green-dark: #3a7a3b; --green-soft: #e9f4ea;
+      --amber: #b45309; --amber-soft: #fff4e5; --red: #c62828; --red-soft: #fdecec;
+      --blue: #1d4ed8; --blue-soft: #e8efff;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    html, body { margin: 0; background: var(--panel); color: var(--text); }
+    .top { background: #fff; padding: 22px 20px 18px; border-bottom: 1px solid var(--border-soft); }
+    .wrap { max-width: 560px; margin: 0 auto; }
+    h1 { margin: 0; font-size: 26px; font-weight: 750; color: var(--navy); }
+    .sub { margin: 6px 0 16px; font-size: 15px; color: var(--muted); line-height: 1.4; }
+    .sum { font-size: 15px; color: var(--muted); }
+    .sum b.o { color: var(--red); } .sum b.l { color: var(--amber); }
+
+    .seg { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 16px; }
+    .seg button { flex: 1; border: 0; background: #fff; padding: 11px 0; font-size: 15px; font-weight: 650; color: var(--navy); cursor: pointer; }
+    .seg button + button { border-left: 1px solid var(--border); }
+    .seg button.active { background: var(--navy); color: #fff; }
+
+    .list { padding: 16px 20px 40px; }
+    .card { background: #fff; border: 1px solid var(--border-soft); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+    .row1 { display: flex; align-items: center; gap: 10px; }
+    .name { flex: 1; min-width: 0; font-size: 16px; font-weight: 650; }
+    .qty { font-size: 22px; font-weight: 750; }
+    .meta { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+    .details { font-size: 13.5px; color: var(--label); margin-top: 8px; background: var(--panel); border-radius: 10px; padding: 8px 10px; white-space: pre-wrap; }
+    .badge { font-size: 12px; font-weight: 650; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+    .b-ok { background: var(--green-soft); color: var(--green-dark); }
+    .b-low { background: var(--amber-soft); color: var(--amber); }
+    .b-out { background: var(--red-soft); color: var(--red); }
+    .b-ord { background: var(--blue-soft); color: var(--blue); }
+
+    .btn { width: 100%; height: 46px; margin-top: 12px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; border: 0; }
+    .btn.go { background: var(--green); color: #fff; }
+    .btn.undo { background: #fff; color: var(--muted); border: 1px solid var(--border); font-weight: 600; }
+    .btn:disabled { opacity: .6; cursor: default; }
+    .empty { text-align: center; color: var(--muted); padding: 30px 10px; font-size: 15px; }
+
+    .toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: 92%;
+      background: var(--navy); color: #fff; padding: 12px 16px; border-radius: 12px; font-size: 14.5px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18); display: none; }
+    .toast.err { background: var(--red); }
+
+    /* --- app feel --- */
+    html { -webkit-text-size-adjust: 100%; }
+    body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
+    button, .card, .seg button { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+  </style>
+</head>
+<body>
+  <div class="top"><div class="wrap">
+    <h1>🧾 Consumables orders</h1>
+    <p class="sub">Tap <b>Mark ordered</b> once an item is on order. The sheet updates and the order confirmation email goes out.</p>
+    <div class="sum" id="sum">Loading…</div>
+    <div class="seg">
+      <button type="button" id="f-need" class="active" onclick="setFilter('need')">Needs ordering</button>
+      <button type="button" id="f-all" onclick="setFilter('all')">All items</button>
+    </div>
+  </div></div>
+
+  <div class="wrap list" id="list"></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var KEY = urlKey();
+    var inventory = [];
+    var filter = 'need';
+
+    window.onload = load;
+
+    function load() {
+      google.script.run
+        .withSuccessHandler(function (d) { inventory = d.inventory || []; render(); })
+        .withFailureHandler(function (e) { toast('Could not load: ' + msg(e), true); })
+        .getConsumablesData();
+    }
+
+    function status(it) {
+      if (it.qty <= 0) return it.ordered ? 'ord' : 'out';
+      if (it.min && it.qty < it.min) return it.ordered ? 'ord' : 'low';
+      return 'ok';
+    }
+    var LABEL = { out: 'Out', low: 'Low', ord: 'Ordered', ok: 'OK' };
+    var RANK = { out: 0, low: 1, ord: 2, ok: 3 };
+
+    function setFilter(f) {
+      filter = f;
+      document.getElementById('f-need').classList.toggle('active', f === 'need');
+      document.getElementById('f-all').classList.toggle('active', f === 'all');
+      render();
+    }
+
+    function render() {
+      var out = 0, low = 0, ord = 0;
+      inventory.forEach(function (it) { var s = status(it); if (s === 'out') out++; else if (s === 'low') low++; else if (s === 'ord') ord++; });
+      document.getElementById('sum').innerHTML =
+        (out || low ? '<b class="o">' + out + ' out</b> · <b class="l">' + low + ' low</b> need ordering' : 'Nothing needs ordering right now') +
+        (ord ? ' · ' + ord + ' on order' : '');
+
+      var rows = inventory.filter(function (it) {
+        return filter === 'all' || status(it) === 'out' || status(it) === 'low' || status(it) === 'ord';
+      }).sort(function (a, b) { return RANK[status(a)] - RANK[status(b)]; });
+
+      var list = document.getElementById('list');
+      list.innerHTML = '';
+      if (!rows.length) { list.innerHTML = '<div class="empty">✅ All stocked. Nothing to order.</div>'; return; }
+
+      rows.forEach(function (it) {
+        var s = status(it);
+        var c = document.createElement('div');
+        c.className = 'card';
+        c.innerHTML =
+          '<div class="row1"><div class="name"></div><span class="badge b-' + s + '">' + LABEL[s] + '</span><div class="qty">' + it.qty + '</div></div>' +
+          '<div class="meta">In stock ' + it.qty + (it.min ? ' · Minimum ' + it.min : '') + '</div>' +
+          (it.details ? '<div class="details"></div>' : '');
+        c.querySelector('.name').textContent = it.name;
+        if (it.details) c.querySelector('.details').textContent = it.details;
+
+        if (s === 'ord') {
+          c.appendChild(button('undo', 'Ordered ✓ · Undo', function (b) { setOrdered(it, false, b); }));
+        } else if (s === 'out' || s === 'low') {
+          c.appendChild(button('go', 'Mark ordered', function (b) { setOrdered(it, true, b); }));
+        }
+        list.appendChild(c);
+      });
+    }
+
+    function button(cls, text, fn) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn ' + cls; b.textContent = text;
+      b.onclick = function () { fn(b); };
+      return b;
+    }
+
+    function setOrdered(it, val, btn) {
+      btn.disabled = true; btn.textContent = 'Saving…';
+      google.script.run
+        .withSuccessHandler(function (m) { it.ordered = val; toast(m); render(); })
+        .withFailureHandler(function (e) { btn.disabled = false; toast('Not saved: ' + msg(e), true); render(); })
+        .markOrdered({ key: KEY, item: it.name, ordered: val });
+    }
+
+    function msg(e) { return (e && e.message) ? e.message : String(e); }
+    var tTimer;
+    function toast(t, err) {
+      var el = document.getElementById('toast');
+      el.textContent = t; el.className = 'toast' + (err ? ' err' : ''); el.style.display = 'block';
+      clearTimeout(tTimer); tTimer = setTimeout(function () { el.style.display = 'none'; }, 3500);
+    }
+  </script>
+</body>
+</html>

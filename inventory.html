@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Inventory</title>
+  <link rel="manifest" href="manifest-inventory.json">
+  <link rel="apple-touch-icon" href="icons/inventory-180.png">
+  <link rel="icon" type="image/png" href="icons/inventory-192.png">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Inventory">
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <style>
+    :root {
+      --navy: #22355e; --text: #1f2937; --label: #3d4a5c; --muted: #6b7280;
+      --border: #d5dbe5; --border-soft: #e4e8ef; --panel: #f3f5f8;
+      --green: #458f46; --green-dark: #3a7a3b; --green-soft: #e9f4ea;
+      --amber: #b45309; --amber-soft: #fff4e5; --red: #c62828; --red-soft: #fdecec;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    html, body { margin: 0; background: var(--panel); color: var(--text); }
+    .top { background: #fff; padding: 22px 20px 16px; border-bottom: 1px solid var(--border-soft); }
+    .wrap { max-width: 560px; margin: 0 auto; }
+    h1 { margin: 0; font-size: 26px; font-weight: 750; color: var(--navy); }
+    .sub { margin: 6px 0 14px; font-size: 15px; color: var(--muted); line-height: 1.4; }
+
+    .seg { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 10px; }
+    .seg button { flex: 1; border: 0; background: #fff; padding: 11px 0; font-size: 15px; font-weight: 650; color: var(--navy); cursor: pointer; }
+    .seg button + button { border-left: 1px solid var(--border); }
+    .seg button.active { background: var(--navy); color: #fff; }
+    .seg.small button { padding: 9px 0; font-size: 14px; }
+    .seg.small button.active { background: #e8ecf4; color: var(--navy); }
+    .hide { display: none !important; }
+
+    .search { width: 100%; height: 46px; border: 1px solid var(--border); border-radius: 12px; padding: 0 14px; font-size: 16px; outline: none; -webkit-appearance: none; margin-top: 4px; }
+    .search:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(34,53,94,.12); }
+
+    .list { padding: 14px 20px 120px; }
+    .card { background: #fff; border: 1px solid var(--border-soft); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; }
+    .card.changed { border-color: var(--green); box-shadow: 0 0 0 2px var(--green-soft); }
+    .head { display: flex; align-items: center; gap: 10px; }
+    .name { flex: 1; min-width: 0; font-size: 15.5px; font-weight: 650; }
+    .pos { display: inline-block; min-width: 26px; padding: 2px 7px; margin-right: 6px; border-radius: 8px; background: #e8ecf4; color: var(--navy); font-size: 13px; font-weight: 750; text-align: center; }
+    .badge { font-size: 12px; font-weight: 650; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+    .b-ok { background: var(--green-soft); color: var(--green-dark); }
+    .b-low { background: var(--amber-soft); color: var(--amber); }
+    .b-out { background: var(--red-soft); color: var(--red); }
+    .meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .meta .new { color: var(--green-dark); font-weight: 650; }
+    .row2 { display: flex; gap: 8px; margin-top: 10px; }
+    .row2 button { width: 52px; height: 46px; flex: none; border-radius: 12px; border: 1px solid var(--border); background: #fff; color: var(--navy); font-size: 22px; cursor: pointer; }
+    .row2 button:active { background: var(--panel); }
+    .row2 input { flex: 1; min-width: 0; height: 46px; border: 1px solid var(--border); border-radius: 12px; text-align: center; font-size: 20px; font-weight: 700; outline: none; -webkit-appearance: none; }
+    .row2 input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(34,53,94,.12); }
+    .empty { text-align: center; color: var(--muted); padding: 30px 10px; font-size: 15px; }
+
+    .bar { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; border-top: 1px solid var(--border-soft); padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); }
+    .bar .wrap { display: flex; gap: 10px; }
+    .save { flex: 1; height: 54px; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; }
+    .save:disabled { background: #b9d3ba; cursor: default; }
+    .reset { height: 54px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--border); background: #fff; color: var(--muted); font-size: 15px; font-weight: 600; cursor: pointer; }
+
+    .toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); max-width: 92%;
+      background: var(--navy); color: #fff; padding: 12px 16px; border-radius: 12px; font-size: 14.5px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18); display: none; z-index: 5; }
+    .toast.err { background: var(--red); }
+
+    /* --- app feel --- */
+    html { -webkit-text-size-adjust: 100%; }
+    body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
+    button, .card, .seg button { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+  </style>
+</head>
+<body>
+  <div class="top"><div class="wrap">
+    <h1>📋 Inventory</h1>
+    <p class="sub">Type what's actually on hand. Changed items turn green. Nothing changes on the sheet until you tap <b>Save</b>.</p>
+
+    <div class="seg">
+      <button type="button" id="m-cons" class="active" onclick="setMode('cons')">Consumables</button>
+      <button type="button" id="m-roll" onclick="setMode('rollers')">Rollers</button>
+    </div>
+    <div class="seg small hide" id="pressSeg">
+      <button type="button" id="p-ls" class="active" onclick="setPress('640LS')">640LS rollers</button>
+      <button type="button" id="p-ex" onclick="setPress('EXPRESS')">Express rollers</button>
+    </div>
+
+    <input class="search" id="search" placeholder="Search items…" oninput="render()" autocomplete="off">
+  </div></div>
+
+  <div class="wrap list" id="list"><div class="empty">Loading…</div></div>
+
+  <div class="bar"><div class="wrap">
+    <button type="button" class="reset" onclick="resetAll()">Reset</button>
+    <button type="button" class="save" id="saveBtn" onclick="save()" disabled>No changes</button>
+  </div></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var KEY = urlKey();
+    var mode = 'cons';        // 'cons' or 'rollers'
+    var press = '640LS';      // which press's rollers
+    var items = [];           // current list, in sheet order
+    var counts = {};          // id -> new count typed in
+
+    window.onload = load;
+    window.onbeforeunload = function () { if (dirty()) return 'You have unsaved counts.'; };
+
+    function dirty() { return Object.keys(counts).length > 0; }
+    function idOf(it) { return mode === 'cons' ? it.name : String(it.row); }
+
+    // ---------- switching ----------
+    function okToLeave() {
+      return !dirty() || confirm('You have unsaved counts here. Switch anyway and lose them?');
+    }
+    function setMode(m) {
+      if (m === mode || !okToLeave()) return;
+      mode = m;
+      document.getElementById('m-cons').classList.toggle('active', m === 'cons');
+      document.getElementById('m-roll').classList.toggle('active', m === 'rollers');
+      document.getElementById('pressSeg').classList.toggle('hide', m !== 'rollers');
+      document.getElementById('search').placeholder = m === 'cons' ? 'Search items…' : 'Search rollers…';
+      load();
+    }
+    function setPress(p) {
+      if (p === press || !okToLeave()) return;
+      press = p;
+      document.getElementById('p-ls').classList.toggle('active', p === '640LS');
+      document.getElementById('p-ex').classList.toggle('active', p === 'EXPRESS');
+      load();
+    }
+
+    // ---------- loading ----------
+    function load() {
+      counts = {}; updateBar();
+      document.getElementById('list').innerHTML = '<div class="empty">Loading…</div>';
+      var run = google.script.run
+        .withFailureHandler(function (e) { document.getElementById('list').innerHTML = ''; toast('Could not load: ' + msg(e), true); });
+      if (mode === 'cons') {
+        run.withSuccessHandler(function (d) { items = d.inventory || []; render(); }).getConsumablesData();
+      } else {
+        run.withSuccessHandler(function (d) { items = d || []; render(); }).getRollerData(press);
+      }
+    }
+
+    // ---------- list ----------
+    function status(it) {
+      if (it.qty <= 0) return { c: 'b-out', t: 'Out' };
+      if (it.min && it.qty < it.min) return { c: 'b-low', t: 'Low' };
+      return null;
+    }
+
+    function render() {
+      var q = (document.getElementById('search').value || '').trim().toUpperCase();
+      var list = document.getElementById('list');
+      list.innerHTML = '';
+      var shown = 0;
+
+      items.forEach(function (it) {
+        var hay = (it.name + ' ' + (it.pos || '') + ' ' + (it.details || '')).toUpperCase();
+        if (q && hay.indexOf(q) < 0) return;
+        shown++;
+        var id = idOf(it);
+        var has = counts.hasOwnProperty(id);
+        var s = status(it);
+
+        var c = document.createElement('div');
+        c.className = 'card' + (has ? ' changed' : '');
+        c.innerHTML =
+          '<div class="head"><div class="name"></div>' + (s ? '<span class="badge ' + s.c + '">' + s.t + '</span>' : '') + '</div>' +
+          '<div class="meta"></div>' +
+          '<div class="row2"><button type="button" aria-label="Less">−</button>' +
+          '<input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off">' +
+          '<button type="button" aria-label="More">+</button></div>';
+
+        var nameEl = c.querySelector('.name');
+        if (mode === 'rollers') {
+          var tag = document.createElement('span'); tag.className = 'pos'; tag.textContent = it.pos;
+          nameEl.appendChild(tag);
+        }
+        nameEl.appendChild(document.createTextNode(it.name));
+        setMeta(c, it);
+
+        var input = c.querySelector('input');
+        input.value = has ? counts[id] : it.qty;
+        input.onfocus = function () { input.select(); };
+        input.oninput = function () { setCount(it, input.value, c); };
+        var b = c.querySelectorAll('.row2 button');
+        b[0].onclick = function () { input.value = Math.max(0, (parseInt(input.value, 10) || 0) - 1); setCount(it, input.value, c); };
+        b[1].onclick = function () { input.value = (parseInt(input.value, 10) || 0) + 1; setCount(it, input.value, c); };
+        list.appendChild(c);
+      });
+
+      if (!shown) list.innerHTML = '<div class="empty">' + (items.length ? 'No matches.' : 'Nothing found on this tab.') + '</div>';
+    }
+
+    function setMeta(card, it) {
+      var id = idOf(it);
+      var extra = mode === 'rollers' && it.details ? ' · ' + escapeHtml(it.details) : '';
+      card.querySelector('.meta').innerHTML = counts.hasOwnProperty(id)
+        ? 'Sheet says ' + it.qty + ' → <span class="new">new count ' + counts[id] + '</span>'
+        : 'Sheet says ' + it.qty + (it.min ? ' · Min ' + it.min : '') + extra;
+    }
+
+    function setCount(it, raw, card) {
+      var id = idOf(it), v = parseInt(raw, 10);
+      if (isNaN(v) || v === it.qty) delete counts[id];
+      else counts[id] = Math.max(0, v);
+      card.classList.toggle('changed', counts.hasOwnProperty(id));
+      setMeta(card, it);
+      updateBar();
+    }
+
+    function updateBar() {
+      var n = Object.keys(counts).length;
+      var b = document.getElementById('saveBtn');
+      b.disabled = !n;
+      b.textContent = n ? 'Save ' + n + ' change' + (n === 1 ? '' : 's') : 'No changes';
+    }
+
+    function resetAll() {
+      if (dirty() && !confirm('Clear all the counts you typed?')) return;
+      counts = {}; render(); updateBar();
+    }
+
+    // ---------- save ----------
+    function save() {
+      var b = document.getElementById('saveBtn');
+      b.disabled = true; b.textContent = 'Saving…';
+      var run = google.script.run
+        .withSuccessHandler(function (m) { counts = {}; toast(m); load(); })
+        .withFailureHandler(function (e) { toast('Not saved: ' + msg(e), true); updateBar(); });
+
+      if (mode === 'cons') {
+        run.saveCounts({ key: KEY, changes: Object.keys(counts).map(function (k) { return { item: k, qty: counts[k] }; }) });
+      } else {
+        run.saveRollerCounts({ key: KEY, press: press, changes: Object.keys(counts).map(function (k) { return { row: k, qty: counts[k] }; }) });
+      }
+    }
+
+    function escapeHtml(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+    function msg(e) { return (e && e.message) ? e.message : String(e); }
+    var tTimer;
+    function toast(t, err) {
+      var el = document.getElementById('toast');
+      el.textContent = t; el.className = 'toast' + (err ? ' err' : ''); el.style.display = 'block';
+      clearTimeout(tTimer); tTimer = setTimeout(function () { el.style.display = 'none'; }, 3500);
+    }
+  </script>
+</body>
+</html>
