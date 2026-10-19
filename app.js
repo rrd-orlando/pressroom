@@ -4,7 +4,7 @@
  */
 (function () {
   function call(action, args, onOk, onFail) {
-    fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: action, args: args }) })
+    fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: action, args: args, key: urlKey() }) })
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (d && d.ok) { if (onOk) onOk(d.result); }
