@@ -136,6 +136,7 @@
     html { -webkit-text-size-adjust: 100%; }
     body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
     button, .card, .seg button { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+    h1 .logo { width: 1.25em; height: 1.25em; flex: none; }
   </style>
 </head>
 <body>
@@ -143,7 +144,7 @@
 
     <!-- ===== Left / top: the log form ===== -->
     <div class="form-col">
-      <h1>📦 Log consumable</h1>
+      <h1><svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><path d="M22.8 37.3 A30 30 0 0 1 74.6 32.8" fill="none" stroke="#3f8a41" stroke-width="11"/><polygon points="82.0,43.4 83.4,25.4 64.6,38.6" fill="#3f8a41"/><path d="M77.2 62.7 A30 30 0 0 1 25.4 67.2" fill="none" stroke="#3f8a41" stroke-width="11"/><polygon points="18.0,56.6 16.6,74.6 35.4,61.4" fill="#3f8a41"/></svg> Log consumable</h1>
       <p class="sub" id="subtitle">Takes it off the inventory and adds a line to the LOG.</p>
 
       <div class="seg">
