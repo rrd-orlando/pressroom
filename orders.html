@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Orders">
   <script src="config.js?v=3"></script>
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=4"></script>
   <style>
     :root {
       --navy: #22355e; --text: #1f2937; --label: #3d4a5c; --muted: #6b7280;
@@ -67,6 +67,7 @@
     button, .card, .seg button { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
     h1 { display: flex; align-items: center; gap: 10px; }
     h1 .logo { width: 1.6em; height: 1.6em; flex: none; margin-left: -2px; }
+    h1 { padding-right: 52px; }
   </style>
 </head>
 <body>
@@ -169,6 +170,9 @@
       el.textContent = t; el.className = 'toast' + (err ? ' err' : ''); el.style.display = 'block';
       clearTimeout(tTimer); tTimer = setTimeout(function () { el.style.display = 'none'; }, 3500);
     }
+
+    // Auto-refresh hook (used by app.js)
+    window.appRefreshData = function () { load(); };
   </script>
 </body>
 </html>

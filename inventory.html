@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Inventory">
   <script src="config.js?v=3"></script>
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=4"></script>
   <style>
     :root {
       --navy: #22355e; --text: #1f2937; --label: #3d4a5c; --muted: #6b7280;
@@ -74,6 +74,7 @@
     html { -webkit-text-size-adjust: 100%; }
     body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
     button, .card, .seg button { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+    h1 { padding-right: 52px; }
   </style>
 </head>
 <body>
@@ -109,7 +110,7 @@
     var counts = {};          // id -> new count typed in
 
     window.onload = load;
-    window.onbeforeunload = function () { if (dirty()) return 'You have unsaved counts.'; };
+    window.onbeforeunload = function () { if (window.appCanRefresh && dirty()) return 'You have unsaved counts.'; };
 
     function dirty() { return Object.keys(counts).length > 0; }
     function idOf(it) { return mode === 'cons' ? it.name : String(it.row); }
@@ -251,6 +252,10 @@
       el.textContent = t; el.className = 'toast' + (err ? ' err' : ''); el.style.display = 'block';
       clearTimeout(tTimer); tTimer = setTimeout(function () { el.style.display = 'none'; }, 3500);
     }
+
+    // Auto-refresh hook (used by app.js): never wipe counts you haven't saved
+    window.appRefreshData = function () { load(); };
+    window.appCanRefresh = function () { return !dirty(); };
   </script>
 </body>
 </html>
