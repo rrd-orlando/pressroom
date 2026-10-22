@@ -58,6 +58,11 @@
     .row2 input { flex: 1; min-width: 0; height: 46px; border: 1px solid var(--border); border-radius: 12px; text-align: center; font-size: 20px; font-weight: 700; outline: none; -webkit-appearance: none; }
     .row2 input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(34,53,94,.12); }
     .empty { text-align: center; color: var(--muted); padding: 30px 10px; font-size: 15px; }
+    .ops { display: none; gap: 8px; margin-top: 8px; }
+    .card.editing .ops { display: flex; }
+    .ops button { flex: 1; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--panel); color: var(--navy); font-size: 20px; font-weight: 700; cursor: pointer; }
+    .ops button.done { flex: 1.4; background: var(--navy); color: #fff; border-color: var(--navy); font-size: 15px; }
+    .ops button:active { filter: brightness(.93); }
 
     .bar { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; border-top: 1px solid var(--border-soft); padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); }
     .bar .wrap { display: flex; gap: 10px; }
@@ -80,7 +85,7 @@
 <body>
   <div class="top"><div class="wrap">
     <h1>📋 Inventory</h1>
-    <p class="sub">Type what's actually on hand. Changed items turn green. Nothing changes on the sheet until you tap <b>Save</b>.</p>
+    <p class="sub">Type what's actually on hand. You can add up cases right in the box, like <b>3×24+7</b> or <b>24+24+11</b>. Changed items turn green. Nothing changes on the sheet until you tap <b>Save</b>.</p>
 
     <div class="seg">
       <button type="button" id="m-cons" class="active" onclick="setMode('cons')">Consumables</button>
@@ -176,8 +181,11 @@
           '<div class="head"><div class="name"></div>' + (s ? '<span class="badge ' + s.c + '">' + s.t + '</span>' : '') + '</div>' +
           '<div class="meta"></div>' +
           '<div class="row2"><button type="button" aria-label="Less">−</button>' +
-          '<input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off">' +
-          '<button type="button" aria-label="More">+</button></div>';
+          '<input type="text" inputmode="tel" autocomplete="off" autocorrect="off" spellcheck="false">' +
+          '<button type="button" aria-label="More">+</button></div>' +
+          '<div class="ops"><button type="button" data-op="+">+</button><button type="button" data-op="×">×</button>' +
+          '<button type="button" data-op="−">−</button><button type="button" data-op="C">C</button>' +
+          '<button type="button" class="done" data-op="=">= Done</button></div>';
 
         var nameEl = c.querySelector('.name');
         if (mode === 'rollers') {
@@ -189,11 +197,27 @@
 
         var input = c.querySelector('input');
         input.value = has ? counts[id] : it.qty;
-        input.onfocus = function () { input.select(); };
+        input.onfocus = function () { c.classList.add('editing'); input.select(); };
+        input.onblur = function () { c.classList.remove('editing'); finishExpr(it, input, c); };
         input.oninput = function () { setCount(it, input.value, c); };
+        input.onkeydown = function (e) { if (e.key === 'Enter') input.blur(); };
         var b = c.querySelectorAll('.row2 button');
-        b[0].onclick = function () { input.value = Math.max(0, (parseInt(input.value, 10) || 0) - 1); setCount(it, input.value, c); };
-        b[1].onclick = function () { input.value = (parseInt(input.value, 10) || 0) + 1; setCount(it, input.value, c); };
+        b[0].onclick = function () { input.value = Math.max(0, (calc(input.value) || 0) - 1); setCount(it, input.value, c); };
+        b[1].onclick = function () { input.value = Math.max(0, calc(input.value) || 0) + 1; setCount(it, input.value, c); };
+        // operator strip: keep the keyboard open while tapping these
+        c.querySelectorAll('.ops button').forEach(function (ob) {
+          ob.addEventListener('pointerdown', function (e) { e.preventDefault(); });
+          ob.addEventListener('mousedown', function (e) { e.preventDefault(); });
+          ob.onclick = function () {
+            var op = ob.getAttribute('data-op');
+            if (op === '=') { input.blur(); return; }
+            if (op === 'C') input.value = '';
+            else input.value = input.value.replace(/[+×x*−\-]\s*$/, '') + op;
+            setCount(it, input.value, c);
+            input.focus();
+            try { var n = input.value.length; input.setSelectionRange(n, n); } catch (e2) {}
+          };
+        });
         list.appendChild(c);
       });
 
@@ -209,12 +233,51 @@
     }
 
     function setCount(it, raw, card) {
-      var id = idOf(it), v = parseInt(raw, 10);
-      if (isNaN(v) || v === it.qty) delete counts[id];
+      var id = idOf(it), v = calc(raw);
+      if (v === null && String(raw).trim() !== '') return;   // half-typed: keep the last good count
+      if (v === null || v === it.qty) delete counts[id];
       else counts[id] = Math.max(0, v);
       card.classList.toggle('changed', counts.hasOwnProperty(id));
       setMeta(card, it);
       updateBar();
+    }
+
+    // When you leave the box, swap the math for the answer (3×24+7 → 79)
+    function finishExpr(it, input, card) {
+      var id = idOf(it), raw = input.value.trim();
+      if (raw === '') { input.value = counts.hasOwnProperty(id) ? counts[id] : it.qty; return; }
+      var v = calc(raw);
+      if (v === null) { toast("Couldn't add that up. Check the numbers.", true); input.value = counts.hasOwnProperty(id) ? counts[id] : it.qty; return; }
+      input.value = Math.max(0, v);
+      setCount(it, input.value, card);
+    }
+
+    // Safe calculator: numbers with + − × ÷ and ( ). Multiply/divide before add/subtract.
+    // Returns a whole number, or null if it can't be worked out.
+    function calc(raw) {
+      var t = String(raw == null ? '' : raw).replace(/\s+/g, '')
+        .replace(/[×xX*]/g, '*').replace(/[÷\/]/g, '/').replace(/[−–—]/g, '-').replace(/,/g, '');
+      t = t.replace(/[+\-*\/]+$/, '');                 // ignore a trailing operator while typing
+      if (!t || /[^0-9+\-*\/().]/.test(t)) return null;
+      var i = 0;
+      function num() {
+        if (t[i] === '(') { i++; var v = expr(); if (t[i] !== ')') throw 0; i++; return v; }
+        if (t[i] === '-') { i++; return -num(); }
+        var m = /^\d+(\.\d+)?|^\.\d+/.exec(t.slice(i)); if (!m) throw 0;
+        i += m[0].length; return parseFloat(m[0]);
+      }
+      function term() {
+        var v = num();
+        while (t[i] === '*' || t[i] === '/') { var o = t[i++], r = num(); if (o === '/' && r === 0) throw 0; v = o === '*' ? v * r : v / r; }
+        return v;
+      }
+      function expr() {
+        var v = term();
+        while (t[i] === '+' || t[i] === '-') { var o = t[i++], r = term(); v = o === '+' ? v + r : v - r; }
+        return v;
+      }
+      try { var v = expr(); if (i !== t.length || !isFinite(v)) return null; return Math.round(v); }
+      catch (e) { return null; }
     }
 
     function updateBar() {
@@ -255,7 +318,7 @@
 
     // Auto-refresh hook (used by app.js): never wipe counts you haven't saved
     window.appRefreshData = function () { load(); };
-    window.appCanRefresh = function () { return !dirty(); };
+    window.appCanRefresh = function () { return !dirty() && !(document.activeElement && document.activeElement.closest && document.activeElement.closest('.row2')); };
   </script>
 </body>
 </html>
