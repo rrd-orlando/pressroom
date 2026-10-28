@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Log Consumable</title>
+  <link rel="manifest" href="manifest-log.json?v=3">
+  <!-- iOS 27 home-screen icon: built into the page, because iOS 27 won't download it -->
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://rrd-orlando.github.io/pressroom/icons/log-192.png?v=3">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Log">
+  <script src="config.js?v=3"></script>
+  <script src="app.js?v=4"></script>
+  <style>
+    :root {
+      --navy: #22355e;
+      --text: #1f2937;
+      --label: #3d4a5c;
+      --muted: #6b7280;
+      --border: #d5dbe5;
+      --border-soft: #e4e8ef;
+      --panel: #f3f5f8;
+      --green: #458f46;
+      --green-dark: #3a7a3b;
+      --green-soft: #e9f4ea;
+      --amber: #b45309;
+      --amber-soft: #fff4e5;
+      --red: #c62828;
+      --red-soft: #fdecec;
+      --blue: #1d4ed8;
+      --blue-soft: #e8efff;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    html, body { margin: 0; background: #fff; color: var(--text); }
+
+    /* ---------- Layout: stacked on phone, side-by-side in the sheet popup ---------- */
+    .layout { display: flex; flex-direction: column; }
+    .form-col { padding: 22px 20px 26px; }
+    .inv-col  { background: var(--panel); border-top: 1px solid var(--border-soft); padding: 22px 20px 30px; min-height: 200px; }
+
+    @media (min-width: 720px) {
+      html, body { height: 100%; overflow: hidden; }
+      .layout { flex-direction: row; height: 100vh; }
+      .form-col { width: 380px; flex: none; overflow-y: auto; padding: 20px 22px; }
+      .inv-col  { flex: 1; border-top: 0; border-left: 1px solid var(--border-soft); display: flex; flex-direction: column; padding: 20px 20px 16px; min-width: 0; }
+      .inv-list { flex: 1; overflow-y: auto; padding-right: 4px; }
+    }
+
+    /* ---------- Header ---------- */
+    h1 { margin: 0; font-size: 26px; font-weight: 750; color: var(--navy); display: flex; align-items: center; gap: 10px; }
+    .sub { margin: 6px 0 20px; font-size: 15px; color: var(--muted); line-height: 1.4; }
+
+    /* ---------- Press switch ---------- */
+    .seg { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+    .seg button {
+      flex: 1; border: 0; background: #fff; padding: 12px 0; font-size: 16px; font-weight: 650;
+      color: var(--navy); cursor: pointer; transition: background .15s, color .15s;
+    }
+    .seg button + button { border-left: 1px solid var(--border); }
+    .seg button.active { background: var(--navy); color: #fff; }
+
+    /* ---------- Fields ---------- */
+    .field { margin-bottom: 18px; }
+    label { display: block; font-size: 12.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--label); margin-bottom: 8px; }
+    label span { text-transform: none; letter-spacing: .02em; font-weight: 400; color: var(--muted); }
+    select, input {
+      width: 100%; height: 50px; background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      color: var(--text); font-size: 16px; padding: 0 14px; outline: none;
+      transition: border-color .15s, box-shadow .15s; -webkit-appearance: none; appearance: none;
+    }
+    select {
+      padding-right: 38px; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='14' viewBox='0 0 10 14'%3E%3Cpath d='M1 5l4-4 4 4M1 9l4 4 4-4' stroke='%231f2937' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center;
+    }
+    select:focus, input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(34,53,94,.12); }
+
+    .stepper { display: flex; gap: 10px; }
+    .stepper button {
+      width: 56px; height: 50px; flex: none; border-radius: 12px; border: 1px solid var(--border);
+      background: #fff; color: var(--navy); font-size: 24px; line-height: 1; cursor: pointer;
+    }
+    .stepper button:active { background: var(--panel); }
+    .stepper input { text-align: center; font-size: 22px; font-weight: 700; }
+
+    .chosen { margin-top: 8px; font-size: 13.5px; color: var(--muted); min-height: 18px; }
+
+    .submit {
+      width: 100%; height: 56px; margin-top: 4px; border: 0; border-radius: 12px;
+      background: var(--green); color: #fff; font-size: 18px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px; transition: background .15s;
+    }
+    .submit:hover { background: var(--green-dark); }
+    .submit:disabled { background: #9cc39d; cursor: default; }
+    .spin { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,.5); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; display: none; }
+    .busy .spin { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .status { margin-top: 14px; padding: 11px 14px; border-radius: 12px; font-size: 14.5px; line-height: 1.35; display: none; }
+    .status.ok  { display: block; background: var(--green-soft); color: var(--green-dark); }
+    .status.err { display: block; background: var(--red-soft); color: var(--red); }
+
+    /* ---------- Inventory ---------- */
+    h2 { margin: 0; font-size: 21px; font-weight: 750; color: var(--navy); }
+    .inv-sum { margin: 6px 0 14px; font-size: 15px; color: var(--muted); }
+    .inv-sum b { font-weight: 650; }
+    .inv-sum .s-out { color: var(--red); }
+    .inv-sum .s-low { color: var(--amber); }
+    .filter { height: 44px; font-size: 15px; margin-bottom: 12px; }
+
+    .card {
+      display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--border-soft);
+      border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; cursor: pointer;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .card:hover { border-color: var(--border); box-shadow: 0 1px 4px rgba(16,24,40,.06); }
+    .card.selected { border-color: var(--navy); box-shadow: 0 0 0 2px rgba(34,53,94,.15); }
+    .card.flash { animation: flash 1.6s ease; }
+    @keyframes flash { 0%,40% { background: var(--green-soft); } 100% { background: #fff; } }
+    .c-main { flex: 1; min-width: 0; }
+    .c-name { font-size: 15.5px; font-weight: 650; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .c-meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .c-qty  { font-size: 22px; font-weight: 750; color: var(--text); min-width: 40px; text-align: right; }
+    .badge { font-size: 12px; font-weight: 650; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+    .b-ok  { background: var(--green-soft); color: var(--green-dark); }
+    .b-low { background: var(--amber-soft); color: var(--amber); }
+    .b-out { background: var(--red-soft); color: var(--red); }
+    .b-ord { background: var(--blue-soft); color: var(--blue); }
+    .empty { color: var(--muted); font-size: 14.5px; padding: 10px 2px; }
+
+    /* --- app feel --- */
+    html { -webkit-text-size-adjust: 100%; }
+    body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
+    button, .card, .seg button { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+    h1 .logo { width: 1.6em; height: 1.6em; flex: none; margin-left: -2px; }
+    h1 { padding-right: 52px; }
+  </style>
+</head>
+<body>
+  <div class="layout">
+
+    <!-- ===== Left / top: the log form ===== -->
+    <div class="form-col">
+      <h1><svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><path d="M22.7 40.1 A29 29 0 0 1 71.6 30.6" fill="none" stroke="#3f8a41" stroke-width="15"/><polygon points="82.9,43.2 82.4,19.5 59.4,40.2" fill="#3f8a41"/><path d="M77.3 59.9 A29 29 0 0 1 28.4 69.4" fill="none" stroke="#3f8a41" stroke-width="15"/><polygon points="17.1,56.8 17.6,80.5 40.6,59.8" fill="#3f8a41"/></svg> Log consumable</h1>
+      <p class="sub" id="subtitle">Takes it off the inventory and adds a line to the LOG.</p>
+
+      <div class="seg">
+        <button type="button" id="btn-ls" class="active" onclick="setPress('640LS')">640LS</button>
+        <button type="button" id="btn-express" onclick="setPress('EXPRESS')">Express</button>
+      </div>
+
+      <div class="field">
+        <label for="itemSelect">Item</label>
+        <select id="itemSelect" onchange="onItemChanged()"><option value="" disabled selected>Loading…</option></select>
+        <div class="chosen" id="chosenInfo"></div>
+      </div>
+
+      <div class="field">
+        <label for="qtyInput">Quantity used</label>
+        <div class="stepper">
+          <button type="button" onclick="adjustQty(-1)" aria-label="Less">−</button>
+          <input type="text" id="qtyInput" value="1" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+          <button type="button" onclick="adjustQty(1)" aria-label="More">+</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="operSelect">Operator <span>(remembered on this device)</span></label>
+        <select id="operSelect" onchange="onOperatorSelected(this.value)">
+          <option value="" disabled selected>Select operator…</option>
+        </select>
+      </div>
+
+      <button type="button" id="submitBtn" class="submit" onclick="submitLog()">
+        <span class="spin"></span><span id="btnText">Log usage</span>
+      </button>
+      <div id="statusMsg" class="status"></div>
+    </div>
+
+    <!-- ===== Right / bottom: live inventory ===== -->
+    <div class="inv-col">
+      <h2>Inventory now</h2>
+      <p class="inv-sum" id="invSummary">Loading…</p>
+      <input type="text" id="filterInput" class="filter" placeholder="Search items…" oninput="renderInventory()" autocomplete="off">
+      <div class="inv-list" id="invList"></div>
+    </div>
+
+  </div>
+
+  <script>
+    // In the sheet popup the server passes mode = 'dialog'. As a web app this stays false.
+    var IS_DIALOG = false;
+    var OPER_KEY = 'ls_pressroom_oper_initials';
+
+    var currentPress = '640LS';
+    var inventory = [];      // [{name, qty, min, ordered}]
+    var operatorList = [];
+    var lastLogged = '';
+
+    window.onload = function () { loadData(true); };
+
+    function loadData(first) {
+      google.script.run
+        .withSuccessHandler(function (data) { onDataLoaded(data, first); })
+        .withFailureHandler(function (err) {
+          document.getElementById('invSummary').textContent = 'Could not load inventory.';
+          showStatus('Could not load inventory: ' + errMsg(err), false);
+        })
+        .getConsumablesData();
+    }
+
+    function onDataLoaded(data, first) {
+      inventory = data.inventory || (data['640LS'] || []).map(function (n) { return { name: n, qty: null, min: null }; });
+      operatorList = data.operators || [];
+      if (first) {
+        setPress(data.defaultPress || '640LS');
+        renderOperatorDropdown();
+      } else {
+        var keep = document.getElementById('itemSelect').value;
+        renderItemDropdown();
+        if (keep) document.getElementById('itemSelect').value = keep;
+      }
+      renderInventory();
+      onItemChanged();
+    }
+
+    // ---------- Press switch ----------
+    function setPress(press) {
+      currentPress = press;
+      document.getElementById('btn-ls').classList.toggle('active', press === '640LS');
+      document.getElementById('btn-express').classList.toggle('active', press === 'EXPRESS');
+      document.getElementById('subtitle').textContent =
+        'Takes it off the inventory and adds a line to the ' + (press === 'EXPRESS' ? 'Express' : '640LS') + ' LOG.';
+      var keep = document.getElementById('itemSelect').value;
+      renderItemDropdown();
+      if (keep) document.getElementById('itemSelect').value = keep;
+    }
+
+    // ---------- Dropdowns ----------
+    function renderItemDropdown() {
+      var select = document.getElementById('itemSelect');
+      select.innerHTML = '<option value="" disabled selected>Select an item…</option>';
+      inventory.forEach(function (it) {
+        var opt = document.createElement('option');
+        opt.value = it.name; opt.textContent = it.name;
+        select.appendChild(opt);
+      });
+    }
+
+    function renderOperatorDropdown() {
+      var select = document.getElementById('operSelect');
+      select.innerHTML = '<option value="" disabled selected>Select operator…</option>';
+      operatorList.forEach(function (op) {
+        var opt = document.createElement('option');
+        opt.value = op; opt.textContent = op;
+        select.appendChild(opt);
+      });
+      var saved = null;
+      try { saved = localStorage.getItem(OPER_KEY); } catch (e) {}
+      if (saved && operatorList.indexOf(saved) >= 0) select.value = saved;
+    }
+
+    function onOperatorSelected(val) { try { if (val) localStorage.setItem(OPER_KEY, val); } catch (e) {} }
+
+    function onItemChanged() {
+      var name = document.getElementById('itemSelect').value;
+      var it = findItem(name);
+      document.getElementById('chosenInfo').textContent =
+        (it && it.qty !== null) ? ('In stock: ' + it.qty + (it.min ? '  ·  Min: ' + it.min : '')) : '';
+      renderInventory();
+    }
+
+    function adjustQty(delta) {
+      var input = document.getElementById('qtyInput');
+      var val = parseInt(input.value, 10) || 1;
+      input.value = Math.max(1, val + delta);
+    }
+
+    // ---------- Inventory list ----------
+    function statusOf(it) {
+      if (it.qty === null) return null;
+      if (it.qty <= 0) return { cls: 'b-out', text: 'Out' };
+      if (it.min && it.qty < it.min) return it.ordered ? { cls: 'b-ord', text: 'Ordered' } : { cls: 'b-low', text: 'Low' };
+      return { cls: 'b-ok', text: 'OK' };
+    }
+
+    function renderInventory() {
+      var list = document.getElementById('invList');
+      var q = (document.getElementById('filterInput').value || '').trim().toUpperCase();
+      var selected = document.getElementById('itemSelect').value;
+
+      var outN = 0, lowN = 0;
+      inventory.forEach(function (it) {
+        var s = statusOf(it);
+        if (s && s.text === 'Out') outN++;
+        else if (s && (s.text === 'Low' || s.text === 'Ordered')) lowN++;
+      });
+      document.getElementById('invSummary').innerHTML =
+        inventory.length + ' items' +
+        (outN ? ' · <b class="s-out">' + outN + ' out</b>' : '') +
+        (lowN ? ' · <b class="s-low">' + lowN + ' low</b>' : '') +
+        (!outN && !lowN ? ' · all stocked' : '');
+
+      // Out and low items float to the top
+      var rank = { 'Out': 0, 'Low': 1, 'Ordered': 2, 'OK': 3 };
+      var rows = inventory
+        .filter(function (it) { return !q || it.name.toUpperCase().indexOf(q) >= 0; })
+        .slice()
+        .sort(function (a, b) {
+          var sa = statusOf(a), sb = statusOf(b);
+          return (sa ? rank[sa.text] : 9) - (sb ? rank[sb.text] : 9);
+        });
+
+      list.innerHTML = '';
+      if (!rows.length) { list.innerHTML = '<div class="empty">No items match.</div>'; return; }
+
+      rows.forEach(function (it) {
+        var s = statusOf(it);
+        var card = document.createElement('div');
+        card.className = 'card' + (it.name === selected ? ' selected' : '') + (it.name === lastLogged ? ' flash' : '');
+        card.onclick = function () { pickItem(it.name); };
+        card.innerHTML =
+          '<div class="c-main"><div class="c-name"></div><div class="c-meta"></div></div>' +
+          (s ? '<span class="badge ' + s.cls + '">' + s.text + '</span>' : '') +
+          '<div class="c-qty">' + (it.qty === null ? '' : it.qty) + '</div>';
+        card.querySelector('.c-name').textContent = it.name;
+        card.querySelector('.c-meta').textContent = it.min ? ('Min ' + it.min) : '';
+        list.appendChild(card);
+      });
+      lastLogged = '';
+    }
+
+    function pickItem(name) {
+      document.getElementById('itemSelect').value = name;
+      onItemChanged();
+      if (window.innerWidth < 720) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function findItem(name) {
+      for (var i = 0; i < inventory.length; i++) if (inventory[i].name === name) return inventory[i];
+      return null;
+    }
+
+    // ---------- Submit ----------
+    function setBusy(busy) {
+      var btn = document.getElementById('submitBtn');
+      btn.disabled = busy;
+      btn.classList.toggle('busy', busy);
+      document.getElementById('btnText').textContent = busy ? 'Logging…' : 'Log usage';
+    }
+
+    function submitLog() {
+      var item = document.getElementById('itemSelect').value;
+      var qty = parseInt(document.getElementById('qtyInput').value, 10);
+      var oper = document.getElementById('operSelect').value;
+
+      if (!item) { showStatus('Please select an item.', false); return; }
+      if (!qty || qty < 1) { showStatus('Quantity must be 1 or more.', false); return; }
+      if (!oper) { showStatus('Please select an operator.', false); return; }
+
+      setBusy(true);
+      showStatus('', null);
+
+      google.script.run
+        .withSuccessHandler(function (msg) {
+          setBusy(false);
+          showStatus(msg || 'Logged.', true);
+          document.getElementById('qtyInput').value = '1';
+          document.getElementById('itemSelect').value = '';
+          lastLogged = item;
+          loadData(false);   // refresh the inventory so the new count shows
+          if (IS_DIALOG) setTimeout(function () { google.script.host.close(); }, 2500);
+        })
+        .withFailureHandler(function (err) {
+          setBusy(false);
+          showStatus('Not logged: ' + errMsg(err), false);
+        })
+        .submitConsumableUsage({ press: currentPress, item: item, qty: qty, oper: oper });
+    }
+
+    function errMsg(err) { return (err && err.message) ? err.message : String(err); }
+
+    function showStatus(msg, ok) {
+      var div = document.getElementById('statusMsg');
+      div.textContent = msg;
+      div.className = 'status' + (msg ? (ok ? ' ok' : ' err') : '');
+    }
+
+    // Auto-refresh hook (used by app.js): reload numbers unless a log is in progress
+    window.appRefreshData = function () { if (!document.getElementById('submitBtn').disabled) loadData(false); };
+  </script>
+</body>
+</html>

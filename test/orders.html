@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Consumable Orders</title>
+  <link rel="manifest" href="manifest-orders.json?v=5">
+  <!-- iOS 27 home-screen icon: built into the page, because iOS 27 won't download it -->
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAbHUlEQVR42u2de3xV1ZXH19r7nHvuO8lNCOERFBGoouKrViS0FkfFtyIqndoqVFsKONOpto5FRIGCj47jc2acPqaPabW1VVRKbSswYmtFoD54WgQkGiQkN7nvxzln7zV/nJBxVCT33JvkJOylH/7wg597z93fs9Zvr7X22th46Q5QpuzjjKmfQJmCQ5mCQ5mCQ5mCQ5mCQ5mCQ5mCQ5mCQ5mCQ5mCQ5kyBYcyBYey8k3rl09FBARARLUAhzVy/iGgQQwHY8AQicgWYFokJVhCEqnVP4zpGjCGuoYaB4YoiaQcLHAgAmcoJGXzsmiSpmEkyEY16NEQa6zXGVPO4xN8BgDAvjYrmZEHOu1kRpgW6ToG/UznKCVJGrBwMARkWCjKbEGE/OyUcYGmicEzJgTHNfoa6rSgoeROT820qLXD3tVibtqRf+n13F/fyrcnbL/BQn4kgN5zJNgbnWAIwDnmCrJg0pgRvhlToxeeFZk41v+hvyakWvfDG//IS7TzXfOFDZkn/pjcvKvAEKIhLiT1RoCuPBycgS0gkRETRhtfv7J2+tnRSLDr+YQgQEBEBFBitIT4QkDOn0Scdel4y6bfr8888mT85Tdz4SAzfEwI8jQcGsdUVoQDbN6M2jnTYw4WQhAiMhVGKmSSgCRxjgAgJfzs+cT3ft7+bqsVi3K7onxUEg7OMZ60zzg++OA3h00YbThYMKZ2rL1lQhJjiAD74/YtD+9/Zl2qNsodH1OZBa0aP78iWxLGoDMlZl9S88MFI4fXaXaXt1Bk9GZ2ABEBbEHREJ9+dtTQcc3GrMaR88rwUQHP4WS0OjNi2ZyGeTNijq9TQaSvAw0RZ7jyz+kbl7VwhppWgV1MuWvoSMvOtLhnbsO8GTFbEJEio+9dCHCGtqCLJ0f+a+FIW5AtoPwUUrnLyDh0pMTyuQ1zpsdsQZyrONJvpnG0BU07M/yTO0aaJlHZW0JW5reJJ8QNl9TMvTJmC9K4AsMTfJx/ZnjxV+s7U4KX5z3cw8EYpLLijOMDy+c2CAlcJcK9xMec6bGZ51bFk7az4+1TOBBASAj52b99e7jhQ1BJLU9JEIaS4L6bGsY2GoWidP3auoSDc+xMiW/MrBs3yrAFcaVAPaZPSVJVmC/5Wn2uINEtHczdZ2cL8oRjjBsvr5EqoHjSOEchYdqZkWmTIsm0S/HhBg5ELBTlP1xdGw4wIlIBxatGiPCtL9ZpGrprnGGlkwEFUx7baFz+uSgRqIaM3lpYIklSSCGkkCRdNIJxhlLC6ccFmiYGMznpIvnEXHxkNi+vOSca9DMplduovEmSkggRGTLOOGecIUNASSUX5h2krruwWkhCKHmpSm72EYJCAXZRUxTUFqXi3gKIiBgyAGhLt78Tf6c9086QjawZcXTt0SEj5KDj/IWeqUMEgLNPDY8cqnckha5hSXSVBgdDyBbo1PH+444yiEBtUiobRxARETft3fT4q0+8+d7mVD5lCQsA/bpRG4pNHjv5C2fMHBUb1XM+EEFIqgqzz54c+sXvEzVRraSej9KqspxjOiu+OK3qc6eEnHqxWtQKkmHa5r3P3/e9P9y/N94MAIZmBHwBv+5njOXM3OvvvrFq8+/C/tCE4RMkyR7WKaQExjBvymdeSgcNJnvPcxCRpuGnjw+qmFLhaAJk2uZtTy1YvX11XbgOAKSUkmS3DNW4Vh2stqW9dOWyVD49u2lWD/2H8wKfPDZQFea2TchKqOaXEBgQQQiIhti4RsMJMcoqo0ClZMi+9/t/Wb19dX2k3tmhfGh7QkRCCoasNlz70JpHVm1exZBJOnxV3lmmo4bqw2o106aSFq0UOABMm4bGtGG1moKjUiak4Iyv3/PqU399ui5cZwnrsPvbiBF+aPUjiVyCIevJ/kUS6Doe3eAzbSqpaM5KfBKoCnGnmKKsIlKDMZbIJe793X0BX6AnnoCIDM04kDrw1GsrnM1LD/4XAIBYlJfa7l9SWEHLphH1OqhTBRWSGpIkAtz57F17O/YamtHDNIYkaWjGS3/7ExFxxnvCEwAc1eArNS9V8mZURZMKSg3O+GMvfn/d316qDlQLKXrub3RN35doac+2d699D5Rpyd9QZSr6U2qs3r7m+y/9wNmGlORyOPJsMduR6YCDadDeMAVHf/gMkpzxvfG9y1YtD+pB16vb2y2ZCo5+EKEAkDWzC56+PVvM6ppeasUEAYUUEX/EyYi4KJooOLzrNhiyu1fds+397WEj3HOp8UGHYQqzMdYYC8Wc1KqCY/BIjV+sf/y3b66qCdaUJDU+sCdgpm1O/dTne7iVVXAMGDJe2b3+wdUPVwWqXPgMx23krfyoWOMlEy8mINabZ4QUHH0qQltTB5Y8t0RnmutYgIBFu3jz+TeHjBAR9Z7gUHD0nQglItM2F664oy3TbuiGu3CgMS2RS1x31penjG0qqbFDweF1t/HgCw9teGdDNBB1F1A448l8ctKYM+d9fq6Qog+OFio4+khqPPfGyic2/DIWitnCpQgtWIVhVcPuuuxOhgwRezWgKDj6jowtLVvuef7esD8sXR19RwCngXTpFYvrwnV9EFAUHH0hNRhjyXxy0bN3SSk5cnfJUMZ4Mp/6xrnfOGnkSU5XR998f827vywAeHZKaQ98+sGiK9757OK98b3VgWp3WQ2NaR25zqtOv/Lq02c4fqjPntJzcDgDr7pmiHm4Aiyl4xgOqQsPFl0fW/vW2rpQnTsyOOPpYvrEESfcct7NfRZNvAgHEUino50jAFg25QrSg+M+iCgc5Jw5YgCE/JgufOcVX7Nj7Q9e+lEsGHNHhtNyXBWo+u4VS3yar+dNxYMNDknAEDjCu63WinWpP7+Ze7fVSmUkY96KLQggCWJRflSD/vlTQxdPiQyp1pzCWffCORvX3W17lqxcGvAF3BddAYt28d4Zd4+sGdnHAcVDcDgzxIoW3f3Tth+v7IynhMZR19Cz52IOdNhvvl14Zl3qnv9uv+mq2LwZtd18O1nLnJlb9OydeTMfMkLushoa0+LZ+E1T508aM6lfyPAEHA4Zb79nzrm75ZWt+ZoIr6vSiKhf7gnoofk0CPoZIqRz8tZHW9e9lnv0W8PrqrmURCA548tX3bNt3zbXpTWNaZ25zgtOmDa7aZaQgvXTkDXmBTKaW63ptzZveqswNKYxBFuQkM6EPI/+KwmEJFuQxmFoTFv1l/TVC5pTWekElF+sf/y5N1aWU3TNmtljhhzznYtuc05HYj8p8/6Eg7q0G8y7b19zqxWLcsseYHdsEIFl09CY9uq2/C0Pt2icv7L71YdWP1ITqnYtQoUUhmYsu2Jp2AgTUD9K8v4MK1IQ5/jwk/G1m7JDY5plD9TLV0yLhtSwp9aYJ31q57q2JQgcAV3mu5Cliqnl05eNHTq2v6RG/3sOIuAc0zn5g2c6o0FmiwF9LQ8JwUIB+f2/LG1Nxv26z3XRtSPb8eVJXzpvwrn9TkZ/wuHMmlmzMbN3v+U32IC+sgmRpO2vG/fj+uE7UIYI3JDhFF2njG2aP3WekJJ5YNJv/4UVAgBYvzUvDz2SyLnlyWsoCPH/vjCisM2qmsbfVQ9/wSpGAd1sXJ2ia0NVwx2XLOSM93YXj9fhcHTW2++ZuoYf236NCJZNnTnhNTgiIa4dTM0hCmGHgrHNQ8b+t7BDgO6KruiEoSWXL64L13khoPQ7HAAAmbz8WDGOCEWLRg/zXXhWmMhb0x6eXJ1qTwqdAyFJaWhGZ8Px/w4ogDRwG1Di2fiCixac3DjRO2T0fxLsUON1GUKhSOOOMhbOrvea53jxtez7HbZPQyIEwqGf+k/df0DYYUSXmdCObMeVp02fcdp0T5HR/3DQJ7oWyyJbkNcu6LAlIACgFFakfuxPwkM2CrPKHRmc8XQhffKok791/i19X3T1OhyHDT0aR4neggMBAG1hVUcbXqo5aqUw3YtQ0zajgehdly4yNKPvi67e3coO5I2rlHbQH91VP/6HUvgBXe7CCcgU5p2XLmqMNfZlf5eCoxcjIUmNa7mGCY8yXgDJ3fWraUzrzHbO+dzXJh97ltekhoLDPRpS+OrH/9AIN0sRcLd35Yx35jqnnXD+9ZOv8ywZXtcc3iNDIPK6Y5624E/CqnYtQnNmbmz92IUX3+4oD88+r/IcPTVJEpFvfGdTO/+5j0WJXJ50tYXt4767LlvUdZ7RwxM7FRw9JYMh25/cv/CZO2zb/XVlCJg1swsuum18w3hvilAFR8nbCiKyhb1wxaJ4Ju7XDXc3xzv9XV8689rzJpznZamh4CjFbUjJGX/ghQc3NW+K+qOue0KTheTkY8+aN3VeP3b+KUFaSXNe8RWvPfOLVx8vp/Mvb+WHVQ1bfNldmmeKroPBczhHx1zcNlIRqcEZ3/7+9n/5w/0Rf8TtSdeuq1LuvHRRLBQTUg6Uu3eZt7FwWnaRIXOOljuvct9Q4rzfndnOBU8vFFKUcdKVpQrpm8/75qmjThFS8IFzX7dHwwqiJAINwgxZppBvzx4Qwo74I/XRekfH9XaZynFXnPHFK5c2x5tLHRX6QanRke244tTLr/Re0XVAwoEobdtv6HabWL1gxYYt7+1K5DuklAFfoKGq4dNHnT79tCtGVI9w3uNeCt4HT7r+54tvvVgTqinnpOvExonfnvYtDxZdByAcKIQdNiJ7Ro7/USb01h+2kKEZGtc44wWrsLN159aWrU+9tuLLk66dNfl65+hTxUP4wfHCq53xwq4nu3WfdPVm0XWgwYFS2qFgzZbhJ96PWg5EJOInJ80AABy5pmtBX9CW9gMvPPhux7t3XLLQubGmgr9793jh5avuLme8MAAU7eKy6d8dXj18wAUUDwpSImEY4b3DTvxXZKa0QwTig5sURwcIKRiwIZEhT7+2YvFzSxiybnoqIkIBIFPMfOfp2zOuxgt3B5RkLjn37K9PGds0QMnw4m5lyLifci1D0viEshYB2cKuDdVWnA9HGdz7/H3b920P+8Ou812JXOLc4//O40XXAQMHopQiGKr7a7B6m7BDPemtsmWF+egeL7zyzd/WhGpcTnZjLGtmj60/duHFt3ffA6rgKHPrCEAQqX8FQPZcPlSQj67rtHavf3D1Q+7HCwNatvBx33evWBr29/NJ10EUVogzPesLNxPpJTXeVYSPg+OFWxevXKozvYztMdqU++cLbz22foz3i64DBQ4iyTVfSvMlibRSG+/K5MPZj3SNF063uR4vzFDLWskzhl19wQnTBrTU8KYgle4OBX2UD+jx5VZw8ObOh1Y/vOGdja6LrkSc65lM+wRr/7VENDjK3R55BnRauqUIIkp3UwQ/yAci9tB/OK/4s68/9/irT8RCLie7ASFjRbtQt3/7XFsgDpbrmD0DOLNts8rMDUO0gLAi/uOwfDhSY2vL1nuevzfij7i9uwQBCZD2b59jF+qZVoTBYp7ZygIRabn4REBBZZRLeh5fnP7NRC6x6Nk7nT2ny50OIdOy7bu+kItPZFoGiCs4Kq5IGeP51P4mK9/AmOnaefQwvjjJViK667kl78T39vDC34+VGkxPp/ZN7dx7MdfTg4kMTwlSRGYLsyq+5yrGC2UOLz5sfHGKrt9f94O1O9aWdKfr/0eDMS1XTI1p23kd04oEg+3KXS+JamJMz6X2fbZ999VMTwGxXuLjA+OFfxgLuxWhgMBsaYXf3zZPCgPQLsfbKTh6Fr/1bHz3NfE9VzM9DVDW/POP5cMRoXva3+kaL+w6407AmNm644ZiZhTj+TJRVnD0nI90fNfMjj1XIU8hYGX5AIKcmbvjmUV5M69zzR0cRJz70vF3rkgfmMT1NA0uqeFhOACBkOuZA2/PzLVcY0OqTHf9IT4YY8tWLd+2b1vYCAvpUoRyPZ1undSx+yo+uLYnHzJv9pAiQ8hZyeOiX7lgat3ylQ/HQtXlzLt2+Pj1pt+EjPDw6mG/fXNVGfkuxrSCmR1x4K2vALNhUJt3z60goC1T15x2XTon/23to9WhapBQDh914bpfb/o1Arru/ANAxoS09f3b5tpmFddyRIP5VJiXnw0loCR5w5RZ86fOS2QTZd56J0kG9IDh9jCjsz+xKNv29nX5xKe4lh3cZHgcDkBAhswSYnbTrPnnzE/kKsCHazI0piXznTNOuXakcaEpEwgcBrsNAPYZMiHF7MnXzz9nXvl8uDPOeCKfbBo7+aZz5tuUPULOGA+As7IIyBgXUsyePAsIHlnzaHWwGgj67D6W7vHCCy++nSGzhRg0ddcBD0f3uyukmN00C6BP+egeL7z08sVDIkMkDYwD8kdKWPkoH/On9l18cS6G/adz/9EZL8yQwxFjA+wl6Objpj7hw5n5d+VpV844bYY9KDr/BjMczqsspJjVNKu39enB8cITvz3tFiLieMQNuhl4D4yA/KA+7YovrPJ8OCddo4HonZcu8nHfQD9kMMgFad/rU0uY98y4e1RslDjyAsrA8ByfcEUjIrOFmN00a97UeZ3ZBJRXv/0QeR3ZxA1TvnrWmEmWsBnyD36u8hzeiCAIiMD5ofMfnAPIrzTNMnR8ePWjQb2KAKA8/8FQSxUSl51y/g1TZgFInWsf/VYKjv4no2jSgQ7buen5kK4FQJJ10XHXt7TZK7Y8FtCqZBlvNwKzZLaxevT1n76ttcMiAPaRozS2TUcIHx6FQ0gIB9iG7bmmObsPv6BEANLHL+L1icDoJ8GKuBtJDoCAgpFv58avXvA/nYR5BPZRHVM0ydBRkoKj10xK4hxHDNFs4WwEPubHFgJyh79s1jmDDRlIsF0zgaD2mCelKz6IkPFC+1tf79w/HvUUEv/YE3iHSpAigiRqHKo5UknBUYbSBACA44/2C5nEQ0eWHqeqEQCJp+O7ZwJA7ZgnpVkaH0Rc8yU7my9M7JuqGykgfiixfsiFJ0DA40f7B40u6bfdCkMEgHM/E44EmTi0jy7pivmu/tPdMzt2XcX1dM+bfok417LZ+Eltb1/rNGrQoT/6UHAWbRpepzWdFOx+OgWH2w9mICUcP9poOimYykqtMnkEBGJMz7Tvntm+5yqmp4kO379OxJmWs4s1rdvnAjkBruSl1TimsuKiyZEhNZqQpDxHZeyOG4YGDBSicq6YgOnp9l0z47uv0nxJAPkJLoRI41rWLsb2bfknuxBj3HRBBmdQKMrGev3mv6+jik6vO3LhYAyEpBOOMe66sf5AwuYMK3T9NAIh1zLx3Ve37rgRgDEtC8SIGBB25cqIEXEA1PSEmRu+7/VbC4nxzFVPKGMgCbJ5ef83GobVafSJG28lSEt651AIuvGy2P64uPdnbdEw8/uYXYH51QgAXM8mmi8qJMfWHfvzYM02QEGkAXEAQhSIQohAouXc9t0zpRV2cfzEubwym5emRff/47BpZ0aEIM4HTw6k//McnKOUsHD2kPGjfLc/1vp+ux0JMZ+OlRhzwXkgZedHt25eEKx9PVT7hhFq5r4UEDOLtcXU6Ezbp/OpYxkvcl8RqISfggBIUsGieFKMG+W776aGc04PCzmoyPBKEswRp1f/XdWZJwb/46mOVX9Jv9dqWTZVJNGEkCUA2Xky7DyV8QIyEwCkCJDQkVuMJ6kr1pSw72UIhg+PGW5c9tnInOmxmggXEjgbbHlTr2RIGQMhYdRQfdnXh976pbotu4q7Wsz2hM05ViKhRIAEQEChLpmFAoAAgkA1pbImJQ2r1ceM9J04xggYDACkBD4Ymz08lD7nDIhASqoK88kTg5MnBr3/8wlBjOFgbSr1Vm0FERxXIQnIwyloBHA00SATGZ6G4/8QQQA44jqvVJ5DmYJDmYJDmYJDmYJDmTIFh7JegQPVBnNgmouFKwEOItI03NdmAwBTHmcgYYEA0NxqMSytFlHaInMGiYywBSn3MZDgAACAjqQo9ZUuxXMA+Di2dtqtHTbAkXX2a2BLBwZCUnOr6dOxpKJESWEFNA2SGbGrxQIAqeAYCObAsK/Nbmm3fRpSL3kOJ3oVTdq0Iwfg6cKYsm5zOvs37yp0poTGe1NzEJFPw5dezwEAY0p4DBjB8eJrWVl6T3xpcEgJQT/buCO/Z5/FUEWWARBTOMd8kdZszAaMTzofVAnPAaBr2JkSf1ifBgCp6PC2SSIiWL81t6vF9Bsl99QxF58XMPDxPyZtQVxFFs/HFET46aoEEfVuEqw7soT8/I2dhdUbsogghHIeXnUbEhjDne+af3w1EwlyIXofDgAgIM7wgV+2Hzwgr8yTggMIAB78ZXsqK935eOYOyWiI/emN3K9eSDIGtnIeXtzBAme4YXv+ly8kayJcuFKHLmskUlIkyJb9pL0tYXOGSph6zGcAANiCFj7WCgCILpfHLRwEhg/fO2B984H9iCClyoh5yW0I4gyW/7jt5TdzkSAXLu+AL6OfQwiIRfmKdakHnohrHFVw8YjZgjSOv/1z+l+fiMeqeDnrwsr8HrVRvuS/Dqx6Oa0rPrzhMzSOW/cU53/v/YC/3MOC5fZlEEDQYF/5bsvvX8loHC3FR7/6DM5x657ijH9uzpvSp/U7HAScAWd43ZL3fveXtM5RSFWS63MFSl3RZPOuwozbmjtSIuBD11Kj23jV+PnlOw/OAQB/szYV9ONnJgSd5JiqzPXZrhUROMNn1qWuX9KSzsmgn5VPRmXg6PYfGseVL6d3t5hTTg4F/Ux2DaFWy9dbJgkkEWcoJC35Udt3/r0VEfw6VoSMisEBB6eshQN84478qpczQ2PacUcbiF0PgKBSqZUMIpKc+9KBIb68Ofe1u/f96oVkdYQzrGTOCRsv3VHZr65xzBVloUjnfyb8D9fUTj4p2O39gAgZomphd/Xu0cHJA9258G17io/+Ov6r1UkAiAR5xXeLlYcDABgCIiazQtfwrBODX7qg+uxTQ7Eo/xD7Srj2aIXQuQLx//5LNi9f2ZL72fOJNRuzqayoDnNAkLIXPro34OiKWAwkQSYnJcGIIdqUiaGzTwudMs7fONQXMJTrKM0sm/a1WZt3FV98Lbv2r9k9LaYkiAQZ59h7hfFehKPLizBAwKIlcwUigKoQa6jVjmrQa6L8mOE+hkhqEMehQwkANLeaHUnR3Gq93253poWUFPAzvw8RUPRyTavX4ej2jc5dW0KQaZFlk5CqItNDB4wMQdfRp6HG0RlK1jc/XB9N9iECcfCBDB8GDAS1f+m5/yByxq6Lvi1/98PYJyIQBADKa3jd1JlXZQoOZQoOZQoOZQoOZQoOZQoOZQoOZQoOZQoOZQoOZcoUHMoUHMoqYP8Lk9346WHMEZoAAAAASUVORK5CYII=">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://rrd-orlando.github.io/pressroom/icons/orders-192.png?v=5">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Orders">
+  <script src="config.js?v=3"></script>
+  <script src="app.js?v=4"></script>
+  <style>
+    :root {
+      --navy: #22355e; --text: #1f2937; --label: #3d4a5c; --muted: #6b7280;
+      --border: #d5dbe5; --border-soft: #e4e8ef; --panel: #f3f5f8;
+      --green: #458f46; --green-dark: #3a7a3b; --green-soft: #e9f4ea;
+      --amber: #b45309; --amber-soft: #fff4e5; --red: #c62828; --red-soft: #fdecec;
+      --blue: #1d4ed8; --blue-soft: #e8efff;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    html, body { margin: 0; background: var(--panel); color: var(--text); }
+    .top { background: #fff; padding: 22px 20px 18px; border-bottom: 1px solid var(--border-soft); }
+    .wrap { max-width: 560px; margin: 0 auto; }
+    h1 { margin: 0; font-size: 26px; font-weight: 750; color: var(--navy); }
+    .sub { margin: 6px 0 16px; font-size: 15px; color: var(--muted); line-height: 1.4; }
+    .sum { font-size: 15px; color: var(--muted); }
+    .sum b.o { color: var(--red); } .sum b.l { color: var(--amber); }
+
+    .seg { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 16px; }
+    .seg button { flex: 1; border: 0; background: #fff; padding: 11px 0; font-size: 15px; font-weight: 650; color: var(--navy); cursor: pointer; }
+    .seg button + button { border-left: 1px solid var(--border); }
+    .seg button.active { background: var(--navy); color: #fff; }
+
+    .list { padding: 16px 20px 40px; }
+    .card { background: #fff; border: 1px solid var(--border-soft); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+    .row1 { display: flex; align-items: center; gap: 10px; }
+    .name { flex: 1; min-width: 0; font-size: 16px; font-weight: 650; }
+    .qty { font-size: 22px; font-weight: 750; }
+    .meta { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+    .details { font-size: 13.5px; color: var(--label); margin-top: 8px; background: var(--panel); border-radius: 10px; padding: 8px 10px; white-space: pre-wrap; }
+    .badge { font-size: 12px; font-weight: 650; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+    .b-ok { background: var(--green-soft); color: var(--green-dark); }
+    .b-low { background: var(--amber-soft); color: var(--amber); }
+    .b-out { background: var(--red-soft); color: var(--red); }
+    .b-ord { background: var(--blue-soft); color: var(--blue); }
+
+    .btn { width: 100%; height: 46px; margin-top: 12px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; border: 0; }
+    .btn.go { background: var(--green); color: #fff; }
+    .btn.undo { background: #fff; color: var(--muted); border: 1px solid var(--border); font-weight: 600; }
+    .btn:disabled { opacity: .6; cursor: default; }
+    .empty { text-align: center; color: var(--muted); padding: 30px 10px; font-size: 15px; }
+
+    .toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: 92%;
+      background: var(--navy); color: #fff; padding: 12px 16px; border-radius: 12px; font-size: 14.5px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18); display: none; }
+    .toast.err { background: var(--red); }
+
+    /* --- app feel --- */
+    html { -webkit-text-size-adjust: 100%; }
+    body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
+    button, .card, .seg button { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+    h1 { display: flex; align-items: center; gap: 10px; }
+    h1 .logo { width: 1.6em; height: 1.6em; flex: none; margin-left: -2px; }
+    h1 { padding-right: 52px; }
+  </style>
+</head>
+<body>
+  <div class="top"><div class="wrap">
+    <h1><svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><rect x="10" y="30" width="54" height="54" rx="9" fill="none" stroke="#1d4ed8" stroke-width="9"/><polyline points="20,56 38,74 90,16" fill="none" stroke="#3f8a41" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/></svg> Consumables orders</h1>
+    <p class="sub">Tap <b>Mark ordered</b> once an item is on order. The sheet updates and the order confirmation email goes out.</p>
+    <div class="sum" id="sum">Loading…</div>
+    <div class="seg">
+      <button type="button" id="f-need" class="active" onclick="setFilter('need')">Needs ordering</button>
+      <button type="button" id="f-all" onclick="setFilter('all')">All items</button>
+    </div>
+  </div></div>
+
+  <div class="wrap list" id="list"></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var KEY = urlKey();
+    var inventory = [];
+    var filter = 'need';
+
+    window.onload = load;
+
+    function load() {
+      google.script.run
+        .withSuccessHandler(function (d) { inventory = d.inventory || []; render(); })
+        .withFailureHandler(function (e) { toast('Could not load: ' + msg(e), true); })
+        .getConsumablesData();
+    }
+
+    function status(it) {
+      if (it.qty <= 0) return it.ordered ? 'ord' : 'out';
+      if (it.min && it.qty < it.min) return it.ordered ? 'ord' : 'low';
+      return 'ok';
+    }
+    var LABEL = { out: 'Out', low: 'Low', ord: 'Ordered', ok: 'OK' };
+    var RANK = { out: 0, low: 1, ord: 2, ok: 3 };
+
+    function setFilter(f) {
+      filter = f;
+      document.getElementById('f-need').classList.toggle('active', f === 'need');
+      document.getElementById('f-all').classList.toggle('active', f === 'all');
+      render();
+    }
+
+    function render() {
+      var out = 0, low = 0, ord = 0;
+      inventory.forEach(function (it) { var s = status(it); if (s === 'out') out++; else if (s === 'low') low++; else if (s === 'ord') ord++; });
+      document.getElementById('sum').innerHTML =
+        (out || low ? '<b class="o">' + out + ' out</b> · <b class="l">' + low + ' low</b> need ordering' : 'Nothing needs ordering right now') +
+        (ord ? ' · ' + ord + ' on order' : '');
+
+      var rows = inventory.filter(function (it) {
+        return filter === 'all' || status(it) === 'out' || status(it) === 'low' || status(it) === 'ord';
+      }).sort(function (a, b) { return RANK[status(a)] - RANK[status(b)]; });
+
+      var list = document.getElementById('list');
+      list.innerHTML = '';
+      if (!rows.length) { list.innerHTML = '<div class="empty">✅ All stocked. Nothing to order.</div>'; return; }
+
+      rows.forEach(function (it) {
+        var s = status(it);
+        var c = document.createElement('div');
+        c.className = 'card';
+        c.innerHTML =
+          '<div class="row1"><div class="name"></div><span class="badge b-' + s + '">' + LABEL[s] + '</span><div class="qty">' + it.qty + '</div></div>' +
+          '<div class="meta">In stock ' + it.qty + (it.min ? ' · Minimum ' + it.min : '') + '</div>' +
+          (it.details ? '<div class="details"></div>' : '');
+        c.querySelector('.name').textContent = it.name;
+        if (it.details) c.querySelector('.details').textContent = it.details;
+
+        if (s === 'ord') {
+          c.appendChild(button('undo', 'Ordered ✓ · Undo', function (b) { setOrdered(it, false, b); }));
+        } else if (s === 'out' || s === 'low') {
+          c.appendChild(button('go', 'Mark ordered', function (b) { setOrdered(it, true, b); }));
+        }
+        list.appendChild(c);
+      });
+    }
+
+    function button(cls, text, fn) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn ' + cls; b.textContent = text;
+      b.onclick = function () { fn(b); };
+      return b;
+    }
+
+    function setOrdered(it, val, btn) {
+      btn.disabled = true; btn.textContent = 'Saving…';
+      google.script.run
+        .withSuccessHandler(function (m) { it.ordered = val; toast(m); render(); })
+        .withFailureHandler(function (e) { btn.disabled = false; toast('Not saved: ' + msg(e), true); render(); })
+        .markOrdered({ key: KEY, item: it.name, ordered: val });
+    }
+
+    function msg(e) { return (e && e.message) ? e.message : String(e); }
+    var tTimer;
+    function toast(t, err) {
+      var el = document.getElementById('toast');
+      el.textContent = t; el.className = 'toast' + (err ? ' err' : ''); el.style.display = 'block';
+      clearTimeout(tTimer); tTimer = setTimeout(function () { el.style.display = 'none'; }, 3500);
+    }
+
+    // Auto-refresh hook (used by app.js)
+    window.appRefreshData = function () { load(); };
+  </script>
+</body>
+</html>

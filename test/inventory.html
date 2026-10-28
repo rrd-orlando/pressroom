@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Inventory</title>
+  <link rel="manifest" href="manifest-inventory.json?v=3">
+  <!-- iOS 27 home-screen icon: built into the page, because iOS 27 won't download it -->
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://rrd-orlando.github.io/pressroom/icons/inventory-192.png?v=3">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Inventory">
+  <script src="config.js?v=3"></script>
+  <script src="app.js?v=4"></script>
+  <style>
+    :root {
+      --navy: #22355e; --text: #1f2937; --label: #3d4a5c; --muted: #6b7280;
+      --border: #d5dbe5; --border-soft: #e4e8ef; --panel: #f3f5f8;
+      --green: #458f46; --green-dark: #3a7a3b; --green-soft: #e9f4ea;
+      --amber: #b45309; --amber-soft: #fff4e5; --red: #c62828; --red-soft: #fdecec;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    html, body { margin: 0; background: var(--panel); color: var(--text); }
+    .top { background: #fff; padding: 22px 20px 16px; border-bottom: 1px solid var(--border-soft); }
+    .wrap { max-width: 560px; margin: 0 auto; }
+    h1 { margin: 0; font-size: 26px; font-weight: 750; color: var(--navy); }
+    .sub { margin: 6px 0 14px; font-size: 15px; color: var(--muted); line-height: 1.4; }
+
+    .seg { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 10px; }
+    .seg button { flex: 1; border: 0; background: #fff; padding: 11px 0; font-size: 15px; font-weight: 650; color: var(--navy); cursor: pointer; }
+    .seg button + button { border-left: 1px solid var(--border); }
+    .seg button.active { background: var(--navy); color: #fff; }
+    .seg.small button { padding: 9px 0; font-size: 14px; }
+    .seg.small button.active { background: #e8ecf4; color: var(--navy); }
+    .hide { display: none !important; }
+
+    .search { width: 100%; height: 46px; border: 1px solid var(--border); border-radius: 12px; padding: 0 14px; font-size: 16px; outline: none; -webkit-appearance: none; margin-top: 4px; }
+    .search:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(34,53,94,.12); }
+
+    .list { padding: 14px 20px 120px; }
+    .card { background: #fff; border: 1px solid var(--border-soft); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; }
+    .card.changed { border-color: var(--green); box-shadow: 0 0 0 2px var(--green-soft); }
+    .head { display: flex; align-items: center; gap: 10px; }
+    .name { flex: 1; min-width: 0; font-size: 15.5px; font-weight: 650; }
+    .pos { display: inline-block; min-width: 26px; padding: 2px 7px; margin-right: 6px; border-radius: 8px; background: #e8ecf4; color: var(--navy); font-size: 13px; font-weight: 750; text-align: center; }
+    .badge { font-size: 12px; font-weight: 650; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+    .b-ok { background: var(--green-soft); color: var(--green-dark); }
+    .b-low { background: var(--amber-soft); color: var(--amber); }
+    .b-out { background: var(--red-soft); color: var(--red); }
+    .meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .meta .new { color: var(--green-dark); font-weight: 650; }
+    .row2 { display: flex; gap: 8px; margin-top: 10px; }
+    .row2 button { width: 52px; height: 46px; flex: none; border-radius: 12px; border: 1px solid var(--border); background: #fff; color: var(--navy); font-size: 22px; cursor: pointer; }
+    .row2 button:active { background: var(--panel); }
+    .row2 input { flex: 1; min-width: 0; height: 46px; border: 1px solid var(--border); border-radius: 12px; text-align: center; font-size: 20px; font-weight: 700; outline: none; -webkit-appearance: none; }
+    .row2 input:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(34,53,94,.12); }
+    .empty { text-align: center; color: var(--muted); padding: 30px 10px; font-size: 15px; }
+    .ops { display: none; gap: 8px; margin-top: 8px; }
+    .card.editing .ops { display: flex; }
+    .ops button { flex: 1; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--panel); color: var(--navy); font-size: 20px; font-weight: 700; cursor: pointer; }
+    .ops button.done { flex: 1.4; background: var(--navy); color: #fff; border-color: var(--navy); font-size: 15px; }
+    .ops button:active { filter: brightness(.93); }
+
+    .bar { position: fixed; left: 0; right: 0; bottom: 0; background: #fff; border-top: 1px solid var(--border-soft); padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); }
+    .bar .wrap { display: flex; gap: 10px; }
+    .save { flex: 1; height: 54px; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; }
+    .save:disabled { background: #b9d3ba; cursor: default; }
+    .reset { height: 54px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--border); background: #fff; color: var(--muted); font-size: 15px; font-weight: 600; cursor: pointer; }
+
+    .toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); max-width: 92%;
+      background: var(--navy); color: #fff; padding: 12px 16px; border-radius: 12px; font-size: 14.5px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18); display: none; z-index: 5; }
+    .toast.err { background: var(--red); }
+
+    /* --- app feel --- */
+    html { -webkit-text-size-adjust: 100%; }
+    body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
+    button, .card, .seg button { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+    h1 { padding-right: 52px; }
+  </style>
+</head>
+<body>
+  <div class="top"><div class="wrap">
+    <h1>📋 Inventory</h1>
+    <p class="sub">Type what's actually on hand. You can add up cases right in the box, like <b>3×24+7</b> or <b>24+24+11</b>. Changed items turn green. Nothing changes on the sheet until you tap <b>Save</b>.</p>
+
+    <div class="seg">
+      <button type="button" id="m-cons" class="active" onclick="setMode('cons')">Consumables</button>
+      <button type="button" id="m-roll" onclick="setMode('rollers')">Rollers</button>
+    </div>
+    <div class="seg small hide" id="pressSeg">
+      <button type="button" id="p-ls" class="active" onclick="setPress('640LS')">640LS rollers</button>
+      <button type="button" id="p-ex" onclick="setPress('EXPRESS')">Express rollers</button>
+    </div>
+
+    <input class="search" id="search" placeholder="Search items…" oninput="render()" autocomplete="off">
+  </div></div>
+
+  <div class="wrap list" id="list"><div class="empty">Loading…</div></div>
+
+  <div class="bar"><div class="wrap">
+    <button type="button" class="reset" onclick="resetAll()">Reset</button>
+    <button type="button" class="save" id="saveBtn" onclick="save()" disabled>No changes</button>
+  </div></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var KEY = urlKey();
+    var mode = 'cons';        // 'cons' or 'rollers'
+    var press = '640LS';      // which press's rollers
+    var items = [];           // current list, in sheet order
+    var counts = {};          // id -> new count typed in
+
+    window.onload = load;
+    window.onbeforeunload = function () { if (window.appCanRefresh && dirty()) return 'You have unsaved counts.'; };
+
+    function dirty() { return Object.keys(counts).length > 0; }
+    function idOf(it) { return mode === 'cons' ? it.name : String(it.row); }
+
+    // ---------- switching ----------
+    function okToLeave() {
+      return !dirty() || confirm('You have unsaved counts here. Switch anyway and lose them?');
+    }
+    function setMode(m) {
+      if (m === mode || !okToLeave()) return;
+      mode = m;
+      document.getElementById('m-cons').classList.toggle('active', m === 'cons');
+      document.getElementById('m-roll').classList.toggle('active', m === 'rollers');
+      document.getElementById('pressSeg').classList.toggle('hide', m !== 'rollers');
+      document.getElementById('search').placeholder = m === 'cons' ? 'Search items…' : 'Search rollers…';
+      load();
+    }
+    function setPress(p) {
+      if (p === press || !okToLeave()) return;
+      press = p;
+      document.getElementById('p-ls').classList.toggle('active', p === '640LS');
+      document.getElementById('p-ex').classList.toggle('active', p === 'EXPRESS');
+      load();
+    }
+
+    // ---------- loading ----------
+    function load() {
+      counts = {}; updateBar();
+      document.getElementById('list').innerHTML = '<div class="empty">Loading…</div>';
+      var run = google.script.run
+        .withFailureHandler(function (e) { document.getElementById('list').innerHTML = ''; toast('Could not load: ' + msg(e), true); });
+      if (mode === 'cons') {
+        run.withSuccessHandler(function (d) { items = d.inventory || []; render(); }).getConsumablesData();
+      } else {
+        run.withSuccessHandler(function (d) { items = d || []; render(); }).getRollerData(press);
+      }
+    }
+
+    // ---------- list ----------
+    function status(it) {
+      if (it.qty <= 0) return { c: 'b-out', t: 'Out' };
+      if (it.min && it.qty < it.min) return { c: 'b-low', t: 'Low' };
+      return null;
+    }
+
+    function render() {
+      var q = (document.getElementById('search').value || '').trim().toUpperCase();
+      var list = document.getElementById('list');
+      list.innerHTML = '';
+      var shown = 0;
+
+      items.forEach(function (it) {
+        var hay = (it.name + ' ' + (it.pos || '') + ' ' + (it.details || '')).toUpperCase();
+        if (q && hay.indexOf(q) < 0) return;
+        shown++;
+        var id = idOf(it);
+        var has = counts.hasOwnProperty(id);
+        var s = status(it);
+
+        var c = document.createElement('div');
+        c.className = 'card' + (has ? ' changed' : '');
+        c.innerHTML =
+          '<div class="head"><div class="name"></div>' + (s ? '<span class="badge ' + s.c + '">' + s.t + '</span>' : '') + '</div>' +
+          '<div class="meta"></div>' +
+          '<div class="row2"><button type="button" aria-label="Less">−</button>' +
+          '<input type="text" inputmode="tel" autocomplete="off" autocorrect="off" spellcheck="false">' +
+          '<button type="button" aria-label="More">+</button></div>' +
+          '<div class="ops"><button type="button" data-op="+">+</button><button type="button" data-op="×">×</button>' +
+          '<button type="button" data-op="−">−</button><button type="button" data-op="C">C</button>' +
+          '<button type="button" class="done" data-op="=">= Done</button></div>';
+
+        var nameEl = c.querySelector('.name');
+        if (mode === 'rollers') {
+          var tag = document.createElement('span'); tag.className = 'pos'; tag.textContent = it.pos;
+          nameEl.appendChild(tag);
+        }
+        nameEl.appendChild(document.createTextNode(it.name));
+        setMeta(c, it);
+
+        var input = c.querySelector('input');
+        input.value = has ? counts[id] : it.qty;
+        input.onfocus = function () { c.classList.add('editing'); input.select(); };
+        input.onblur = function () { c.classList.remove('editing'); finishExpr(it, input, c); };
+        input.oninput = function () { setCount(it, input.value, c); };
+        input.onkeydown = function (e) { if (e.key === 'Enter') input.blur(); };
+        var b = c.querySelectorAll('.row2 button');
+        b[0].onclick = function () { input.value = Math.max(0, (calc(input.value) || 0) - 1); setCount(it, input.value, c); };
+        b[1].onclick = function () { input.value = Math.max(0, calc(input.value) || 0) + 1; setCount(it, input.value, c); };
+        // operator strip: keep the keyboard open while tapping these
+        c.querySelectorAll('.ops button').forEach(function (ob) {
+          ob.addEventListener('pointerdown', function (e) { e.preventDefault(); });
+          ob.addEventListener('mousedown', function (e) { e.preventDefault(); });
+          ob.onclick = function () {
+            var op = ob.getAttribute('data-op');
+            if (op === '=') { input.blur(); return; }
+            if (op === 'C') input.value = '';
+            else input.value = input.value.replace(/[+×x*−\-]\s*$/, '') + op;
+            setCount(it, input.value, c);
+            input.focus();
+            try { var n = input.value.length; input.setSelectionRange(n, n); } catch (e2) {}
+          };
+        });
+        list.appendChild(c);
+      });
+
+      if (!shown) list.innerHTML = '<div class="empty">' + (items.length ? 'No matches.' : 'Nothing found on this tab.') + '</div>';
+    }
+
+    function setMeta(card, it) {
+      var id = idOf(it);
+      var extra = mode === 'rollers' && it.details ? ' · ' + escapeHtml(it.details) : '';
+      card.querySelector('.meta').innerHTML = counts.hasOwnProperty(id)
+        ? 'Sheet says ' + it.qty + ' → <span class="new">new count ' + counts[id] + '</span>'
+        : 'Sheet says ' + it.qty + (it.min ? ' · Min ' + it.min : '') + extra;
+    }
+
+    function setCount(it, raw, card) {
+      var id = idOf(it), v = calc(raw);
+      if (v === null && String(raw).trim() !== '') return;   // half-typed: keep the last good count
+      if (v === null || v === it.qty) delete counts[id];
+      else counts[id] = Math.max(0, v);
+      card.classList.toggle('changed', counts.hasOwnProperty(id));
+      setMeta(card, it);
+      updateBar();
+    }
+
+    // When you leave the box, swap the math for the answer (3×24+7 → 79)
+    function finishExpr(it, input, card) {
+      var id = idOf(it), raw = input.value.trim();
+      if (raw === '') { input.value = counts.hasOwnProperty(id) ? counts[id] : it.qty; return; }
+      var v = calc(raw);
+      if (v === null) { toast("Couldn't add that up. Check the numbers.", true); input.value = counts.hasOwnProperty(id) ? counts[id] : it.qty; return; }
+      input.value = Math.max(0, v);
+      setCount(it, input.value, card);
+    }
+
+    // Safe calculator: numbers with + − × ÷ and ( ). Multiply/divide before add/subtract.
+    // Returns a whole number, or null if it can't be worked out.
+    function calc(raw) {
+      var t = String(raw == null ? '' : raw).replace(/\s+/g, '')
+        .replace(/[×xX*]/g, '*').replace(/[÷\/]/g, '/').replace(/[−–—]/g, '-').replace(/,/g, '');
+      t = t.replace(/[+\-*\/]+$/, '');                 // ignore a trailing operator while typing
+      if (!t || /[^0-9+\-*\/().]/.test(t)) return null;
+      var i = 0;
+      function num() {
+        if (t[i] === '(') { i++; var v = expr(); if (t[i] !== ')') throw 0; i++; return v; }
+        if (t[i] === '-') { i++; return -num(); }
+        var m = /^\d+(\.\d+)?|^\.\d+/.exec(t.slice(i)); if (!m) throw 0;
+        i += m[0].length; return parseFloat(m[0]);
+      }
+      function term() {
+        var v = num();
+        while (t[i] === '*' || t[i] === '/') { var o = t[i++], r = num(); if (o === '/' && r === 0) throw 0; v = o === '*' ? v * r : v / r; }
+        return v;
+      }
+      function expr() {
+        var v = term();
+        while (t[i] === '+' || t[i] === '-') { var o = t[i++], r = term(); v = o === '+' ? v + r : v - r; }
+        return v;
+      }
+      try { var v = expr(); if (i !== t.length || !isFinite(v)) return null; return Math.round(v); }
+      catch (e) { return null; }
+    }
+
+    function updateBar() {
+      var n = Object.keys(counts).length;
+      var b = document.getElementById('saveBtn');
+      b.disabled = !n;
+      b.textContent = n ? 'Save ' + n + ' change' + (n === 1 ? '' : 's') : 'No changes';
+    }
+
+    function resetAll() {
+      if (dirty() && !confirm('Clear all the counts you typed?')) return;
+      counts = {}; render(); updateBar();
+    }
+
+    // ---------- save ----------
+    function save() {
+      var b = document.getElementById('saveBtn');
+      b.disabled = true; b.textContent = 'Saving…';
+      var run = google.script.run
+        .withSuccessHandler(function (m) { counts = {}; toast(m); load(); })
+        .withFailureHandler(function (e) { toast('Not saved: ' + msg(e), true); updateBar(); });
+
+      if (mode === 'cons') {
+        run.saveCounts({ key: KEY, changes: Object.keys(counts).map(function (k) { return { item: k, qty: counts[k] }; }) });
+      } else {
+        run.saveRollerCounts({ key: KEY, press: press, changes: Object.keys(counts).map(function (k) { return { row: k, qty: counts[k] }; }) });
+      }
+    }
+
+    function escapeHtml(t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+    function msg(e) { return (e && e.message) ? e.message : String(e); }
+    var tTimer;
+    function toast(t, err) {
+      var el = document.getElementById('toast');
+      el.textContent = t; el.className = 'toast' + (err ? ' err' : ''); el.style.display = 'block';
+      clearTimeout(tTimer); tTimer = setTimeout(function () { el.style.display = 'none'; }, 3500);
+    }
+
+    // Auto-refresh hook (used by app.js): never wipe counts you haven't saved
+    window.appRefreshData = function () { load(); };
+    window.appCanRefresh = function () { return !dirty() && !(document.activeElement && document.activeElement.closest && document.activeElement.closest('.row2')); };
+  </script>
+</body>
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>TEST To Do</title>
+  <link rel="manifest" href="manifest-todo.json?v=1">
+  <!-- iOS 27 home-screen icon: built into the page, because iOS 27 won't download it -->
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+  <link rel="icon" type="image/png" sizes="192x192" href="https://rrd-orlando.github.io/pressroom/icons/todo-192.png?v=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TEST To Do">
+  <script src="config.js?v=3"></script>
+  <script src="app.js?v=4"></script>
+  <style>
+    :root {
+      --navy: #22355e; --text: #1f2937; --label: #3d4a5c; --muted: #6b7280;
+      --border: #d5dbe5; --border-soft: #e4e8ef; --panel: #f3f5f8;
+      --green: #458f46; --green-dark: #3a7a3b; --green-soft: #e9f4ea;
+      --amber: #b45309; --amber-soft: #fff4e5; --red: #c62828; --red-soft: #fdecec;
+      --blue: #1d4ed8; --blue-soft: #e8efff; --orange: #e8710a; --slate: #475569; --slate-soft: #eef1f5;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    html, body { margin: 0; background: var(--panel); color: var(--text); }
+    html { -webkit-text-size-adjust: 100%; }
+    body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
+    button { -webkit-tap-highlight-color: transparent; }
+    .top { background: #fff; padding: 22px 20px 16px; border-bottom: 1px solid var(--border-soft); }
+    .wrap { max-width: 600px; margin: 0 auto; }
+    h1 { margin: 0; font-size: 26px; font-weight: 750; color: var(--navy); display: flex; align-items: center; gap: 10px; padding-right: 52px; }
+    h1 .logo { width: 1.5em; height: 1.5em; flex: none; }
+    .sub { margin: 6px 0 12px; font-size: 14.5px; color: var(--muted); line-height: 1.4; }
+    .sum { font-size: 15px; color: var(--muted); }
+    .sum b { color: var(--text); } .sum b.u { color: var(--red); } .sum b.w { color: var(--slate); }
+
+    .seg { display: flex; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 14px; background: #fff; }
+    .seg button { flex: 1; border: 0; background: #fff; padding: 10px 0; font-size: 14.5px; font-weight: 650; color: var(--navy); cursor: pointer; }
+    .seg button + button { border-left: 1px solid var(--border); }
+    .seg button.active { background: var(--navy); color: #fff; }
+    .addBtn { width: 100%; height: 50px; margin-top: 14px; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; }
+
+    .list { padding: 14px 20px 30px; }
+    .card { background: #fff; border: 1px solid var(--border-soft); border-left: 5px solid var(--border); border-radius: 14px; padding: 12px 14px; margin-bottom: 12px; }
+    .card.urgent { border-left-color: var(--red); }
+    .card.waiting { border-left-color: #94a3b8; }
+    .card.old14 { border-left-color: #f59e0b; } .card.old30 { border-left-color: var(--red); }
+    .row1 { display: flex; gap: 10px; align-items: flex-start; }
+    .num { flex: none; min-width: 30px; height: 30px; border-radius: 15px; background: var(--orange); color: #fff; font-weight: 750; font-size: 15px; display: flex; align-items: center; justify-content: center; padding: 0 8px; }
+    .task { flex: 1; min-width: 0; font-size: 16.5px; font-weight: 650; line-height: 1.35; padding-top: 4px; overflow-wrap: anywhere; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0 40px; }
+    .tag { font-size: 12px; font-weight: 650; padding: 3px 9px; border-radius: 999px; white-space: nowrap; background: var(--panel); color: var(--label); }
+    .t-press { background: var(--blue-soft); color: var(--blue); }
+    .t-urgent { background: var(--red-soft); color: var(--red); }
+    .t-wait { background: var(--slate-soft); color: var(--slate); }
+    .t-age14 { background: var(--amber-soft); color: var(--amber); }
+    .t-age30 { background: var(--red-soft); color: var(--red); }
+    .meta { font-size: 13px; color: var(--muted); margin: 6px 0 0 40px; }
+    .notes { font-size: 13.5px; color: var(--label); margin: 8px 0 0 40px; background: var(--panel); border-radius: 10px; padding: 7px 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .acts { display: flex; gap: 8px; margin-top: 10px; }
+    .acts button { height: 42px; border-radius: 10px; border: 1px solid var(--border); background: #fff; color: var(--navy); font-size: 15px; font-weight: 650; cursor: pointer; padding: 0 12px; }
+    .acts button.mv { width: 44px; padding: 0; font-size: 16px; }
+    .acts button:disabled { opacity: .35; cursor: default; }
+    .acts .grow { flex: 1; }
+    .acts button.done { background: var(--green); border-color: var(--green); color: #fff; }
+    .empty { text-align: center; color: var(--muted); padding: 30px 10px; font-size: 15px; }
+
+    .doneHead { display: flex; align-items: center; justify-content: space-between; width: 100%; border: 0; background: none; padding: 6px 2px 10px; font-size: 15px; font-weight: 700; color: var(--label); cursor: pointer; }
+    .card.fin { border-left-color: var(--green); opacity: .9; }
+    .card.fin .task { text-decoration: line-through; text-decoration-color: #9ca3af; color: var(--label); }
+    .undo { height: 38px; border-radius: 10px; border: 1px solid var(--border); background: #fff; color: var(--muted); font-size: 14px; font-weight: 600; padding: 0 14px; cursor: pointer; margin: 8px 0 0 40px; }
+
+    /* bottom sheet */
+    .shade { position: fixed; inset: 0; background: rgba(15,23,42,.45); display: none; z-index: 30; }
+    .sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 31; background: #fff; border-radius: 18px 18px 0 0; max-height: 92vh; overflow-y: auto;
+             padding: 18px 20px calc(18px + env(safe-area-inset-bottom)); display: none; box-shadow: 0 -8px 30px rgba(0,0,0,.18); }
+    .sheet .wrap { max-width: 600px; }
+    .sheet h2 { margin: 0 0 12px; font-size: 20px; color: var(--navy); }
+    .sheet label { display: block; font-size: 13.5px; font-weight: 650; color: var(--label); margin: 12px 0 6px; }
+    .sheet label span { font-weight: 400; color: var(--muted); }
+    .sheet textarea, .sheet input[type=text], .sheet select { width: 100%; border: 1px solid var(--border); border-radius: 12px; padding: 11px 12px; font-size: 16px; color: var(--text); background: #fff; outline: none; }
+    .sheet textarea { resize: vertical; min-height: 64px; }
+    .sheet textarea:focus, .sheet input:focus, .sheet select:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(34,53,94,.12); }
+    .sheet .seg { margin-top: 0; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chips button { border: 1px solid var(--border); background: #fff; color: var(--navy); border-radius: 999px; padding: 8px 14px; font-size: 14.5px; font-weight: 650; cursor: pointer; }
+    .chips button.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .urgRow { display: flex; align-items: center; gap: 10px; margin-top: 14px; font-size: 15px; font-weight: 650; color: var(--red); cursor: pointer; }
+    .urgRow input { width: 22px; height: 22px; accent-color: var(--red); }
+    .sheetBtns { display: flex; gap: 10px; margin-top: 18px; }
+    .sheetBtns button { height: 50px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .btnCancel { flex: none; padding: 0 18px; border: 1px solid var(--border); background: #fff; color: var(--muted); }
+    .btnGo { flex: 1; border: 0; background: var(--green); color: #fff; }
+    .btnGo:disabled { opacity: .6; cursor: default; }
+    .btnDel { width: 100%; margin-top: 12px; height: 44px; border-radius: 12px; border: 1px solid #f3c4c4; background: #fff; color: var(--red); font-size: 15px; font-weight: 650; cursor: pointer; }
+    .doneTask { font-size: 16px; font-weight: 650; background: var(--panel); border-radius: 12px; padding: 10px 12px; overflow-wrap: anywhere; }
+    .hint { font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.4; }
+
+    .toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: 92%; z-index: 40;
+      background: var(--navy); color: #fff; padding: 12px 16px; border-radius: 12px; font-size: 14.5px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.18); display: none; }
+    .toast.err { background: var(--red); }
+    body.dialog .top { padding-top: 6px; }
+    body.dialog h1 { padding-right: 0; }
+    body.dialog .sheet { max-height: 100vh; }
+  </style>
+</head>
+<body>
+  <div class="top"><div class="wrap">
+    <h1><svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><circle cx="18" cy="22" r="12" fill="#e8710a"/><text x="18" y="27" text-anchor="middle" font-size="15" font-weight="800" fill="#fff" font-family="Arial,Helvetica,sans-serif">1</text><rect x="38" y="15" width="56" height="14" rx="7" fill="#22355e"/><circle cx="18" cy="50" r="12" fill="#e8710a"/><text x="18" y="55" text-anchor="middle" font-size="15" font-weight="800" fill="#fff" font-family="Arial,Helvetica,sans-serif">2</text><rect x="38" y="43" width="46" height="14" rx="7" fill="#22355e"/><circle cx="18" cy="78" r="12" fill="#e8710a"/><text x="18" y="83" text-anchor="middle" font-size="15" font-weight="800" fill="#fff" font-family="Arial,Helvetica,sans-serif">3</text><rect x="38" y="71" width="52" height="14" rx="7" fill="#22355e"/></svg> To Do</h1>
+    <p class="sub">Top of the list gets done first. Use <b>▲ ▼</b> to change the order. Checking a task off writes it to the LOG.</p>
+    <div class="sum" id="sum">Loading…</div>
+    <div class="seg" id="filterSeg">
+      <button type="button" data-f="ALL" class="active">All</button>
+      <button type="button" data-f="640LS">640LS</button>
+      <button type="button" data-f="EXPRESS">Express</button>
+      <button type="button" data-f="PRESSROOM">Pressroom</button>
+    </div>
+    <button type="button" class="addBtn" onclick="openAdd()">＋ Add a task</button>
+  </div></div>
+
+  <div class="wrap list">
+    <div id="list"><div class="empty">Loading…</div></div>
+    <div id="doneWrap" style="display:none">
+      <button type="button" class="doneHead" onclick="toggleDone()"><span id="doneTitle">Finished</span><span id="doneArrow">▸</span></button>
+      <div id="doneList" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- Add / edit sheet -->
+  <div class="shade" id="shade" onclick="closeSheets()"></div>
+  <div class="sheet" id="editSheet"><div class="wrap">
+    <h2 id="editTitle">Add a task</h2>
+    <label for="fTask">What needs to be done?</label>
+    <textarea id="fTask" maxlength="300" rows="2" placeholder="e.g. Replace water pan seal on unit 3"></textarea>
+    <label>Press</label>
+    <div class="seg" id="fPress">
+      <button type="button" data-v="640LS">640LS</button>
+      <button type="button" data-v="EXPRESS">Express</button>
+      <button type="button" data-v="PRESSROOM">Pressroom</button>
+    </div>
+    <label>Type</label>
+    <div class="chips" id="fType"></div>
+    <div id="statusBox">
+      <label>Status</label>
+      <div class="chips" id="fStatus"></div>
+    </div>
+    <label class="urgRow"><input type="checkbox" id="fUrgent"> 🔴 Urgent <span style="font-weight:400;color:var(--muted)">(moves it to the top)</span></label>
+    <label for="fNotes">Notes <span>(optional)</span></label>
+    <input type="text" id="fNotes" maxlength="300" placeholder="Part numbers, where it is, who to call…" autocomplete="off">
+    <div id="byBox">
+      <label for="fBy">Your initials</label>
+      <select id="fBy"></select>
+    </div>
+    <div class="sheetBtns">
+      <button type="button" class="btnCancel" onclick="closeSheets()">Cancel</button>
+      <button type="button" class="btnGo" id="editGo" onclick="saveEdit()">Add task</button>
+    </div>
+    <button type="button" class="btnDel" id="delBtn" onclick="deleteTask()">Delete this task</button>
+  </div></div>
+
+  <!-- Mark done sheet -->
+  <div class="sheet" id="doneSheet"><div class="wrap">
+    <h2>✓ Mark done</h2>
+    <div class="doneTask" id="dTask"></div>
+    <label for="dBy">Your initials</label>
+    <select id="dBy"></select>
+    <label for="dNote">What was done? <span>(optional, goes in the LOG notes)</span></label>
+    <textarea id="dNote" maxlength="300" rows="2" placeholder="e.g. Replaced seal, old one was torn"></textarea>
+    <div class="hint" id="dHint"></div>
+    <div class="sheetBtns">
+      <button type="button" class="btnCancel" onclick="closeSheets()">Cancel</button>
+      <button type="button" class="btnGo" id="doneGo" onclick="confirmDone()">✓ Done &amp; log it</button>
+    </div>
+  </div></div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var IS_DIALOG = false;
+    var OPER_KEY = 'ls_pressroom_oper_initials';   // same remembered initials as the Log app
+    var PRESS_KEY = 'todo_last_press', FILTER_KEY = 'todo_filter';
+    var PRESS_LABEL = { '640LS': '640LS', 'EXPRESS': 'Express', 'PRESSROOM': 'Pressroom' };
+    var TYPE_LABEL = { REPAIR: '🔧 Repair', CLEANING: '🧽 Cleaning', PM: '🛠️ PM', ORDER: '📦 Order', OTHER: '📌 Other' };
+    var STATUS_LABEL = { 'OPEN': 'Open', 'WAITING ON PARTS': '⏸ Waiting on parts', 'WAITING ON MAINTENANCE': '⏸ Waiting on maintenance' };
+
+    var D = { tasks: [], done: [], operators: [], types: [], statuses: [], defaultPress: '640LS', now: Date.now() };
+    var filter = store('get', FILTER_KEY) || 'ALL';
+    var editing = null;      // task being edited (null = adding)
+    var finishing = null;    // task being checked off
+    var pending = 0;         // calls still waiting on the server
+    var showDone = false;
+    var form = { press: '640LS', type: 'OTHER', status: 'OPEN' };
+
+    if (IS_DIALOG) document.body.classList.add('dialog');
+    window.onload = function () {
+      setFilterButtons();
+      document.querySelectorAll('#filterSeg button').forEach(function (b) {
+        b.onclick = function () { filter = b.getAttribute('data-f'); store('set', FILTER_KEY, filter); setFilterButtons(); render(); };
+      });
+      document.querySelectorAll('#fPress button').forEach(function (b) {
+        b.onclick = function () { form.press = b.getAttribute('data-v'); paintForm(); };
+      });
+      load();
+      if (IS_DIALOG) setInterval(function () { if (canRefresh()) load(true); }, 60000);
+    };
+
+    // ---------- talking to the sheet ----------
+    function load(quiet) {
+      pending++;
+      google.script.run
+        .withSuccessHandler(function (d) { pending--; setData(d); })
+        .withFailureHandler(function (e) { pending--; if (!quiet) toast('Could not load: ' + msg(e), true); if (!D.tasks.length) document.getElementById('list').innerHTML = '<div class="empty">Could not load the list.</div>'; })
+        .getTodoData();
+    }
+    function call(fn, payload, btn, after) {
+      pending++;
+      if (btn) { btn.disabled = true; btn.dataset.txt = btn.textContent; btn.textContent = 'Saving…'; }
+      google.script.run
+        .withSuccessHandler(function (d) {
+          pending--;
+          if (btn) { btn.disabled = false; btn.textContent = btn.dataset.txt; }
+          if (after) after();
+          setData(d);
+          if (d && d.message && fn !== 'moveTodo') toast(d.message);
+        })
+        .withFailureHandler(function (e) {
+          pending--;
+          if (btn) { btn.disabled = false; btn.textContent = btn.dataset.txt; }
+          toast(msg(e), true);
+          load(true);
+        })[fn](payload);
+    }
+    function setData(d) {
+      if (!d) return;
+      D = d;
+      fillInitials('fBy'); fillInitials('dBy');
+      render();
+    }
+    function canRefresh() { return pending === 0 && !editing && !finishing && document.getElementById('editSheet').style.display !== 'block'; }
+    window.appRefreshData = function () { load(true); };
+    window.appCanRefresh = canRefresh;
+
+    // ---------- list ----------
+    function visible() {
+      return D.tasks.filter(function (t) { return filter === 'ALL' || t.press === filter; });
+    }
+    function ageDays(t) { return t.created ? Math.max(0, Math.floor((D.now - t.created) / 864e5)) : null; }
+    function fmtDate(ms) { var d = new Date(ms); return (d.getMonth() + 1) + '/' + d.getDate(); }
+
+    function render() {
+      var vis = visible();
+      var urgent = 0, waiting = 0;
+      D.tasks.forEach(function (t) { if (t.urgent) urgent++; if (t.status !== 'OPEN') waiting++; });
+      document.getElementById('sum').innerHTML = D.tasks.length
+        ? '<b>' + D.tasks.length + '</b> open' + (urgent ? ' · <b class="u">' + urgent + ' urgent</b>' : '') + (waiting ? ' · <b class="w">' + waiting + ' waiting</b>' : '')
+        : 'Nothing on the list 🎉';
+
+      var list = document.getElementById('list');
+      list.innerHTML = '';
+      if (!vis.length) {
+        list.innerHTML = '<div class="empty">' + (D.tasks.length ? 'Nothing for ' + PRESS_LABEL[filter] + ' right now.' : 'All caught up. Tap <b>＋ Add a task</b> to start the list.') + '</div>';
+      }
+      vis.forEach(function (t, i) { list.appendChild(card(t, i, vis)); });
+
+      var dw = document.getElementById('doneWrap');
+      var dv = D.done.filter(function (t) { return filter === 'ALL' || t.press === filter; });
+      dw.style.display = dv.length ? 'block' : 'none';
+      document.getElementById('doneTitle').textContent = 'Finished in the last 7 days (' + dv.length + ')';
+      document.getElementById('doneArrow').textContent = showDone ? '▾' : '▸';
+      var dl = document.getElementById('doneList');
+      dl.style.display = showDone ? 'block' : 'none';
+      dl.innerHTML = '';
+      dv.forEach(function (t) { dl.appendChild(doneCard(t)); });
+    }
+
+    function card(t, i, vis) {
+      var days = ageDays(t);
+      var c = document.createElement('div');
+      var cls = 'card';
+      if (t.urgent) cls += ' urgent';
+      else if (days >= 30) cls += ' old30';
+      else if (days >= 14) cls += ' old14';
+      else if (t.status !== 'OPEN') cls += ' waiting';
+      c.className = cls;
+
+      var tags = '<span class="tag t-press">' + PRESS_LABEL[t.press] + '</span><span class="tag">' + (TYPE_LABEL[t.type] || t.type) + '</span>';
+      if (t.status !== 'OPEN') tags += '<span class="tag t-wait">' + esc(STATUS_LABEL[t.status] || t.status) + '</span>';
+      if (t.urgent) tags += '<span class="tag t-urgent">🔴 Urgent</span>';
+      if (days >= 30) tags += '<span class="tag t-age30">⚠ ' + days + ' days old</span>';
+      else if (days >= 14) tags += '<span class="tag t-age14">⚠ ' + days + ' days old</span>';
+
+      var age = days === null ? '' : days === 0 ? 'today' : days === 1 ? '1 day ago' : days + ' days ago';
+      var meta = 'Added ' + (t.created ? fmtDate(t.created) : '') + (t.by ? ' by ' + esc(t.by) : '') + (age ? ' · ' + age : '');
+
+      c.innerHTML =
+        '<div class="row1"><div class="num">' + (D.tasks.indexOf(t) + 1) + '</div><div class="task"></div></div>' +
+        '<div class="tags">' + tags + '</div>' +
+        '<div class="meta">' + meta + '</div>' +
+        (t.notes ? '<div class="notes"></div>' : '') +
+        '<div class="acts">' +
+          '<button type="button" class="mv" aria-label="Move up">▲</button>' +
+          '<button type="button" class="mv" aria-label="Move down">▼</button>' +
+          '<button type="button" class="mv" aria-label="Move to top" style="font-size:13px;font-weight:750">TOP</button>' +
+          '<button type="button" class="grow">✎ Edit</button>' +
+          '<button type="button" class="done">✓ Done</button>' +
+        '</div>';
+      c.querySelector('.task').textContent = t.task;
+      if (t.notes) c.querySelector('.notes').textContent = t.notes;
+
+      var b = c.querySelectorAll('.acts button');
+      if (i === 0) { b[0].disabled = true; b[2].disabled = true; }
+      if (i === vis.length - 1) b[1].disabled = true;
+      b[0].onclick = function () { move(t, vis[i - 1], 'before'); };
+      b[1].onclick = function () { move(t, vis[i + 1], 'after'); };
+      b[2].onclick = function () { move(t, vis[0], 'before'); };
+      b[3].onclick = function () { openEdit(t); };
+      b[4].onclick = function () { openDone(t); };
+      return c;
+    }
+
+    function doneCard(t) {
+      var c = document.createElement('div');
+      c.className = 'card fin';
+      c.innerHTML = '<div class="row1"><div class="num" style="background:var(--green)">✓</div><div class="task"></div></div>' +
+        '<div class="tags"><span class="tag t-press">' + PRESS_LABEL[t.press] + '</span><span class="tag">' + (TYPE_LABEL[t.type] || t.type) + '</span></div>' +
+        '<div class="meta">Done ' + fmtDate(t.doneOn) + (t.doneBy ? ' by ' + esc(t.doneBy) : '') + ' · added ' + (t.created ? fmtDate(t.created) : '') + (t.by ? ' by ' + esc(t.by) : '') + '</div>' +
+        (t.doneNote ? '<div class="notes"></div>' : '') +
+        '<button type="button" class="undo">↩ Undo — put it back on the list</button>';
+      c.querySelector('.task').textContent = t.task;
+      if (t.doneNote) c.querySelector('.notes').textContent = t.doneNote;
+      var u = c.querySelector('.undo');
+      u.onclick = function () {
+        if (!confirm('Put this task back on the list? Its LOG entry will be removed.')) return;
+        call('undoTodo', { id: t.id }, u);
+      };
+      return c;
+    }
+
+    function toggleDone() { showDone = !showDone; render(); }
+
+    // ---------- reordering (moves right away on screen, then saves) ----------
+    function move(t, target, where) {
+      if (!target || target === t) return;
+      var arr = D.tasks.slice();
+      arr.splice(arr.indexOf(t), 1);
+      var at = arr.indexOf(target);
+      arr.splice(where === 'after' ? at + 1 : at, 0, t);
+      D.tasks = arr;
+      render();
+      call('moveTodo', { id: t.id, targetId: target.id, where: where }, null);
+    }
+
+    // ---------- add / edit ----------
+    function openAdd() {
+      editing = null;
+      form = { press: store('get', PRESS_KEY) || D.defaultPress || '640LS', type: 'OTHER', status: 'OPEN' };
+      if (filter !== 'ALL') form.press = filter;
+      document.getElementById('editTitle').textContent = 'Add a task';
+      document.getElementById('editGo').textContent = 'Add task';
+      document.getElementById('fTask').value = '';
+      document.getElementById('fNotes').value = '';
+      document.getElementById('fUrgent').checked = false;
+      document.getElementById('statusBox').style.display = 'none';
+      document.getElementById('byBox').style.display = 'block';
+      document.getElementById('delBtn').style.display = 'none';
+      fillInitials('fBy');
+      paintForm();
+      showSheet('editSheet');
+      setTimeout(function () { document.getElementById('fTask').focus(); }, 250);
+    }
+    function openEdit(t) {
+      editing = t;
+      form = { press: t.press, type: t.type, status: t.status };
+      document.getElementById('editTitle').textContent = 'Edit task';
+      document.getElementById('editGo').textContent = 'Save changes';
+      document.getElementById('fTask').value = t.task;
+      document.getElementById('fNotes').value = t.notes || '';
+      document.getElementById('fUrgent').checked = !!t.urgent;
+      document.getElementById('statusBox').style.display = 'block';
+      document.getElementById('byBox').style.display = 'none';
+      document.getElementById('delBtn').style.display = 'block';
+      paintForm();
+      showSheet('editSheet');
+    }
+    function paintForm() {
+      document.querySelectorAll('#fPress button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-v') === form.press); });
+      chips('fType', D.types.length ? D.types : ['REPAIR', 'CLEANING', 'PM', 'ORDER', 'OTHER'], TYPE_LABEL, 'type');
+      chips('fStatus', D.statuses.length ? D.statuses : ['OPEN', 'WAITING ON PARTS', 'WAITING ON MAINTENANCE'], STATUS_LABEL, 'status');
+    }
+    function chips(id, list, labels, field) {
+      var box = document.getElementById(id);
+      box.innerHTML = '';
+      list.forEach(function (v) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.textContent = labels[v] || v;
+        if (form[field] === v) b.className = 'active';
+        b.onclick = function () { form[field] = v; paintForm(); };
+        box.appendChild(b);
+      });
+    }
+    function saveEdit() {
+      var task = document.getElementById('fTask').value.trim();
+      if (!task) { toast('Type what needs to be done.', true); document.getElementById('fTask').focus(); return; }
+      var btn = document.getElementById('editGo');
+      var p = { task: task, press: form.press, type: form.type, notes: document.getElementById('fNotes').value, urgent: document.getElementById('fUrgent').checked };
+      if (editing) {
+        p.id = editing.id; p.status = form.status;
+        call('updateTodo', p, btn, closeSheets);
+      } else {
+        p.by = document.getElementById('fBy').value;
+        if (!p.by) { toast('Pick your initials.', true); return; }
+        store('set', OPER_KEY, p.by); store('set', PRESS_KEY, form.press);
+        call('addTodo', p, btn, closeSheets);
+      }
+    }
+    function deleteTask() {
+      if (!editing) return;
+      if (!confirm('Delete this task? Nothing is written to the LOG.\n\n' + editing.task)) return;
+      call('deleteTodo', { id: editing.id }, document.getElementById('delBtn'), closeSheets);
+    }
+
+    // ---------- mark done ----------
+    function openDone(t) {
+      finishing = t;
+      document.getElementById('dTask').textContent = t.task;
+      document.getElementById('dNote').value = '';
+      document.getElementById('dHint').textContent = 'Logs as TASK COMPLETED on the ' + (t.press === 'EXPRESS' ? 'Express' : '640LS') + ' LOG' + (t.press === 'PRESSROOM' ? ' (Pressroom tasks go on the 640LS LOG).' : '.');
+      fillInitials('dBy');
+      showSheet('doneSheet');
+    }
+    function confirmDone() {
+      var oper = document.getElementById('dBy').value;
+      if (!oper) { toast('Pick your initials.', true); return; }
+      store('set', OPER_KEY, oper);
+      call('completeTodo', { id: finishing.id, oper: oper, note: document.getElementById('dNote').value }, document.getElementById('doneGo'), closeSheets);
+    }
+
+    // ---------- small helpers ----------
+    function showSheet(id) {
+      document.getElementById('shade').style.display = 'block';
+      document.getElementById(id).style.display = 'block';
+    }
+    function closeSheets() {
+      editing = null; finishing = null;
+      ['shade', 'editSheet', 'doneSheet'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
+    }
+    function fillInitials(id) {
+      var sel = document.getElementById(id), cur = sel.value || store('get', OPER_KEY) || '';
+      sel.innerHTML = '<option value="">Select initials…</option>';
+      (D.operators || []).forEach(function (o) { var op = document.createElement('option'); op.value = o; op.textContent = o; sel.appendChild(op); });
+      if ((D.operators || []).indexOf(cur) >= 0) sel.value = cur;
+    }
+    function setFilterButtons() {
+      document.querySelectorAll('#filterSeg button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-f') === filter); });
+    }
+    function store(op, k, v) {
+      try { if (op === 'get') return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) {}
+      return null;
+    }
+    function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+    function msg(e) { return (e && e.message) ? e.message : String(e); }
+    var tTimer;
+    function toast(t, err) {
+      var el = document.getElementById('toast');
+      el.textContent = t; el.className = 'toast' + (err ? ' err' : ''); el.style.display = 'block';
+      clearTimeout(tTimer); tTimer = setTimeout(function () { el.style.display = 'none'; }, err ? 5000 : 3000);
+    }
+  </script>
+</body>
+</html>
