@@ -40,6 +40,11 @@
     .seg button { flex: 1; border: 0; background: #fff; padding: 10px 0; font-size: 14.5px; font-weight: 650; color: var(--navy); cursor: pointer; }
     .seg button + button { border-left: 1px solid var(--border); }
     .seg button.active { background: var(--navy); color: #fff; }
+    .seg button .cnt { display: inline-block; min-width: 20px; margin-left: 5px; padding: 1px 6px; border-radius: 999px; background: var(--panel); color: var(--navy); font-size: 12.5px; font-weight: 750; line-height: 17px; }
+    .seg button.active .cnt { background: rgba(255,255,255,.22); color: #fff; }
+    .seg button .cnt.hot { background: var(--orange); color: #fff; }
+    #filterSeg button { flex: 1 1 auto; padding: 10px 4px; font-size: 13.5px; white-space: nowrap; }
+    #filterSeg button .cnt { margin-left: 4px; padding: 1px 5px; min-width: 18px; }
     .addBtn { width: 100%; height: 50px; margin-top: 14px; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; }
 
     .list { padding: 14px 20px 30px; }
@@ -113,10 +118,10 @@
     <p class="sub">Top of the list gets done first. Use <b>▲ ▼</b> to change the order. Checking a task off writes it to the LOG.</p>
     <div class="sum" id="sum">Loading…</div>
     <div class="seg" id="filterSeg">
-      <button type="button" data-f="ALL" class="active">All</button>
-      <button type="button" data-f="640LS">640LS</button>
-      <button type="button" data-f="EXPRESS">Express</button>
-      <button type="button" data-f="PRESSROOM">Pressroom</button>
+      <button type="button" data-f="ALL" class="active">All<span class="cnt" id="c-ALL"></span></button>
+      <button type="button" data-f="640LS">640LS<span class="cnt" id="c-640LS"></span></button>
+      <button type="button" data-f="EXPRESS">Express<span class="cnt" id="c-EXPRESS"></span></button>
+      <button type="button" data-f="PRESSROOM">Pressroom<span class="cnt" id="c-PRESSROOM"></span></button>
     </div>
     <button type="button" class="addBtn" onclick="openAdd()">＋ Add a task</button>
   </div></div>
@@ -257,6 +262,14 @@
       document.getElementById('sum').innerHTML = D.tasks.length
         ? '<b>' + D.tasks.length + '</b> open' + (urgent ? ' · <b class="u">' + urgent + ' urgent</b>' : '') + (waiting ? ' · <b class="w">' + waiting + ' waiting</b>' : '')
         : 'Nothing on the list 🎉';
+
+      // task counts on the filter buttons
+      var cnt = { ALL: D.tasks.length, '640LS': 0, EXPRESS: 0, PRESSROOM: 0 };
+      D.tasks.forEach(function (t) { if (cnt[t.press] !== undefined) cnt[t.press]++; });
+      Object.keys(cnt).forEach(function (k) {
+        var el = document.getElementById('c-' + k);
+        if (el) { el.textContent = cnt[k]; el.classList.toggle('hot', cnt[k] > 0 && k !== filter); }
+      });
 
       var list = document.getElementById('list');
       list.innerHTML = '';
