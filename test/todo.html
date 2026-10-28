@@ -192,7 +192,8 @@
     var STATUS_LABEL = { 'OPEN': 'Open', 'WAITING ON PARTS': '⏸ Waiting on parts', 'WAITING ON MAINTENANCE': '⏸ Waiting on maintenance' };
 
     var D = { tasks: [], done: [], operators: [], types: [], statuses: [], defaultPress: '640LS', now: Date.now() };
-    var filter = store('get', FILTER_KEY) || 'ALL';
+    // Sheet popup: always opens on that sheet's own press. Phone app: remembers the last choice.
+    var filter = IS_DIALOG ? null : (store('get', FILTER_KEY) || 'ALL');
     var editing = null;      // task being edited (null = adding)
     var finishing = null;    // task being checked off
     var pending = 0;         // calls still waiting on the server
@@ -203,7 +204,7 @@
     window.onload = function () {
       setFilterButtons();
       document.querySelectorAll('#filterSeg button').forEach(function (b) {
-        b.onclick = function () { filter = b.getAttribute('data-f'); store('set', FILTER_KEY, filter); setFilterButtons(); render(); };
+        b.onclick = function () { filter = b.getAttribute('data-f'); if (!IS_DIALOG) store('set', FILTER_KEY, filter); setFilterButtons(); render(); };
       });
       document.querySelectorAll('#fPress button').forEach(function (b) {
         b.onclick = function () { form.press = b.getAttribute('data-v'); paintForm(); };
@@ -241,6 +242,7 @@
     function setData(d) {
       if (!d) return;
       D = d;
+      if (filter === null) { filter = d.defaultPress || 'ALL'; setFilterButtons(); }
       fillInitials('fBy'); fillInitials('dBy');
       render();
     }
