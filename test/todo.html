@@ -419,7 +419,7 @@
       if (t.doneNote) c.querySelector('.notes').textContent = t.doneNote;
       var u = c.querySelector('.undo');
       u.onclick = function () {
-        if (!confirm('Put this task back on the list? Its LOG entry will be removed.')) return;
+        if (!confirm('Put this task back on the list? Its LOG entry will be removed.' + (t.req ? '\n\nRepair Request #' + t.req + ' will be reopened too.' : ''))) return;
         call('undoTodo', { id: t.id }, u);
       };
       return c;
@@ -513,7 +513,8 @@
       finishing = t;
       document.getElementById('dTask').textContent = t.task;
       document.getElementById('dNote').value = '';
-      document.getElementById('dHint').textContent = 'Logs as TASK COMPLETED on the ' + (t.press === 'EXPRESS' ? 'Express' : '640LS') + ' LOG' + (t.press === 'PRESSROOM' ? ' (Pressroom tasks go on the 640LS LOG).' : '.');
+      document.getElementById('dHint').textContent = 'Logs as TASK COMPLETED on the ' + (t.press === 'EXPRESS' ? 'Express' : '640LS') + ' LOG' + (t.press === 'PRESSROOM' ? ' (Pressroom tasks go on the 640LS LOG).' : '.') +
+        (t.req ? ' It also marks Repair Request #' + t.req + ' as Resolved (within about 5 minutes).' : '');
       fillInitials('dBy');
       showSheet('doneSheet');
     }
