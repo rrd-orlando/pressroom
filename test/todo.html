@@ -4,6 +4,8 @@
 
 
 
+
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>TEST To Do</title>
@@ -60,12 +62,22 @@
     .tabs button .cnt.hot { background: var(--orange); color: #fff; }
     .tabs button[data-f="REPAIRS"] { color: #9a3412; }
     .tabs button[data-f="REPAIRS"].active { color: #9a3412; }
-    .addBtn.top2 { margin-top: 12px; }
+    .btnRow { display: flex; gap: 10px; margin-top: 12px; }
+    .btnRow .addBtn { margin-top: 0; flex: 1; }
+    .reqBtn { background: #fff !important; color: #9a3412 !important; border: 2px solid #f0c4a4 !important; }
+    .card.rq-pend { background: #eef1f5; border-color: #cfd6e0; border-left-color: #94a3b8; }
+    .card.rq-pend.urgent { border-left-color: var(--red); }
+    .pick { display: flex; flex-direction: column; gap: 8px; }
+    .pick button { text-align: left; border: 1px solid var(--border); background: #fff; border-radius: 12px; padding: 10px 12px; font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer; }
+    .pick button.active { border-color: var(--navy); box-shadow: 0 0 0 2px var(--navy) inset; background: #f5f7fb; }
+    .pick.prio button[data-i="0"].active { background: #ffe8e8; box-shadow: 0 0 0 2px var(--red) inset; border-color: var(--red); }
+    .pick.prio button[data-i="1"].active { background: #fffcd7; box-shadow: 0 0 0 2px #c9a227 inset; border-color: #c9a227; }
+    .pick.prio button[data-i="2"].active { background: #e3f0dd; box-shadow: 0 0 0 2px #6aa84f inset; border-color: #6aa84f; }
     @media (max-width: 480px) {
       .top { padding-left: 12px; padding-right: 12px; }
       .tabs { gap: 3px; }
-      .tabs button { padding: 7px 3px 6px; font-size: 12px; }
-      .tabs button.active { padding: 10px 5px 8px; font-size: 13.5px; }
+      .tabs button { padding: 7px 2px 6px; font-size: 11.5px; }
+      .tabs button.active { padding: 10px 4px 8px; font-size: 13px; }
       .tabs button .cnt { margin-left: 3px; padding: 0 4px; min-width: 15px; font-size: 10.5px; }
     }
     .addBtn { width: 100%; height: 50px; margin-top: 14px; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; }
@@ -165,8 +177,9 @@
       .sub { display: none; }
       .headRow { display: flex; align-items: baseline; gap: 16px; }
       .top .wrap { position: relative; }
-      .addBtn.top2 { position: absolute; right: 0; top: 0; width: 190px; margin-top: 0; height: 42px; font-size: 15.5px; }
-      body:not(.dialog) .addBtn.top2 { right: 56px; }
+      .btnRow { position: absolute; right: 0; top: 0; margin-top: 0; }
+      .btnRow .addBtn { width: 180px; flex: none; height: 42px; font-size: 15px; }
+      body:not(.dialog) .btnRow { right: 56px; }
       .tabs { margin-top: 12px; }
       .tabs button { flex: 0 1 auto; padding: 7px 16px 6px; }
       .tabs button.active { padding: 11px 20px 9px; }
@@ -186,7 +199,10 @@
     <p class="sub">Each press has its own list. Top gets done first. Use <b>▲ ▼</b> to change the order. Checking a task off writes it to the LOG.</p>
     <div class="sum" id="sum">Loading…</div>
     </div>
-    <button type="button" class="addBtn top2" onclick="openAdd()">＋ Add a task</button>
+    <div class="btnRow">
+      <button type="button" class="addBtn" onclick="openAdd()">＋ Add a task</button>
+      <button type="button" class="addBtn reqBtn" onclick="openReq()">🔧 Repair request</button>
+    </div>
     <div class="tabs" id="filterSeg">
       <button type="button" data-f="ALL" class="active">All<span class="cnt" id="c-ALL"></span></button>
       <button type="button" data-f="640LS">640LS<span class="cnt" id="c-640LS"></span></button>
@@ -237,6 +253,26 @@
       <button type="button" class="btnGo" id="editGo" onclick="saveEdit()">Add task</button>
     </div>
     <button type="button" class="btnDel" id="delBtn" onclick="deleteTask()">Delete this task</button>
+  </div></div>
+
+  <!-- Repair request sheet -->
+  <div class="sheet" id="reqSheet"><div class="wrap">
+    <h2>🔧 Repair request</h2>
+    <label for="rBy">Submitted by</label>
+    <input type="text" id="rBy" maxlength="60" placeholder="Your name" autocomplete="name">
+    <label>Machine</label>
+    <div class="chips" id="rMachine"></div>
+    <label for="rDesc">Description of issue</label>
+    <textarea id="rDesc" maxlength="1000" rows="3" placeholder="What's wrong? Where? What have you tried?"></textarea>
+    <label>Priority level</label>
+    <div class="pick prio" id="rPrio"></div>
+    <label>How is production affected?</label>
+    <div class="pick" id="rImpact"></div>
+    <div class="hint" id="rHint">Managers get the usual emails and it shows on the Repair Request sheet within about a minute.</div>
+    <div class="sheetBtns">
+      <button type="button" class="btnCancel" onclick="closeSheets()">Cancel</button>
+      <button type="button" class="btnGo" id="reqGo" onclick="sendReq()" style="background:#9a3412">Send request</button>
+    </div>
   </div></div>
 
   <!-- Mark done sheet -->
@@ -319,7 +355,7 @@
       fillInitials('fBy'); fillInitials('dBy');
       render();
     }
-    function canRefresh() { return pending === 0 && !editing && !finishing && document.getElementById('editSheet').style.display !== 'block'; }
+    function canRefresh() { return pending === 0 && !editing && !finishing && document.getElementById('editSheet').style.display !== 'block' && document.getElementById('reqSheet').style.display !== 'block'; }
     window.appRefreshData = function () { load(true); };
     window.appCanRefresh = canRefresh;
 
@@ -386,7 +422,7 @@
       var days = ageDays(t);
       var c = document.createElement('div');
       var cls = 'card';
-      if (t.req) cls += ' ' + reqClass(t);
+      if (t.req) cls += ' ' + (t.req === 'PENDING' ? 'rq-pend' : reqClass(t));
       if (t.urgent) cls += ' urgent';
       else if (days >= 30) cls += ' old30';
       else if (days >= 14) cls += ' old14';
@@ -396,7 +432,8 @@
 
       var tags = t.req
         ? '<span class="tag t-req">' + esc(t.reqMachine || PRESS_LABEL[t.press]) + '</span>' +
-          '<span class="tag">' + esc(t.reqStatus || 'Open') + (t.reqAck ? ' · ' + esc(t.reqAck) : '') + '</span>'
+          (t.req === 'PENDING' ? '<span class="tag">⏳ Sending… (number coming)</span>'
+            : '<span class="tag">' + esc(t.reqStatus || 'Open') + (t.reqAck ? ' · ' + esc(t.reqAck) : '') + '</span>')
         : '<span class="tag">' + (TYPE_LABEL[t.type] || t.type) + '</span>';
       if (t.status !== 'OPEN') tags += '<span class="tag t-wait">' + esc(STATUS_LABEL[t.status] || t.status) + '</span>';
       if (t.urgent) tags += '<span class="tag t-urgent">🔴 Urgent</span>';
@@ -428,6 +465,7 @@
       b[2].onclick = function () { move(t, list[0], 'before'); };
       b[3].onclick = function () { openEdit(t); };
       c.querySelector('.doneBtn').onclick = function () { openDone(t); };
+      if (t.req === 'PENDING') c.querySelector('.doneBtn').style.display = 'none';
       return c;
     }
 
@@ -527,14 +565,15 @@
       chips('fType', D.types.length ? D.types : ['REPAIR', 'CLEANING', 'PM', 'ORDER', 'OTHER'], TYPE_LABEL, 'type');
       chips('fStatus', D.statuses.length ? D.statuses : ['OPEN', 'WAITING ON PARTS', 'WAITING ON MAINTENANCE'], STATUS_LABEL, 'status');
     }
-    function chips(id, list, labels, field) {
+    function chips(id, list, labels, field, obj, repaint) {
+      obj = obj || form; repaint = repaint || paintForm;
       var box = document.getElementById(id);
       box.innerHTML = '';
       list.forEach(function (v) {
         var b = document.createElement('button');
         b.type = 'button'; b.textContent = labels[v] || v;
-        if (form[field] === v) b.className = 'active';
-        b.onclick = function () { form[field] = v; paintForm(); };
+        if (obj[field] === v) b.className = 'active';
+        b.onclick = function () { obj[field] = v; repaint(); };
         box.appendChild(b);
       });
     }
@@ -557,6 +596,50 @@
       if (!editing) return;
       if (!confirm('Delete this task? Nothing is written to the LOG.\n\n' + editing.task)) return;
       call('deleteTodo', { id: editing.id }, document.getElementById('delBtn'), closeSheets);
+    }
+
+    // ---------- 🔧 repair request ----------
+    var REQ_NAME_KEY = 'todo_request_name';
+    var reqForm = { machine: '', priority: '', impact: '' };
+    function openReq() {
+      var R = D.request || { machines: [], priorities: [], impacts: [] };
+      reqForm = { machine: '', priority: '', impact: '' };
+      if (D.defaultPress === 'EXPRESS') reqForm.machine = (R.machines || []).find(function (m) { return /express/i.test(m); }) || '';
+      else if (D.defaultPress === '640LS' && IS_DIALOG) reqForm.machine = (R.machines || []).find(function (m) { return /640/.test(m) && /LS/.test(m); }) || '';
+      document.getElementById('rBy').value = store('get', REQ_NAME_KEY) || '';
+      document.getElementById('rDesc').value = '';
+      document.getElementById('rHint').innerHTML = 'Managers get the usual emails and it shows on the Repair Request sheet within about a minute.' +
+        (R.formUrl ? ' Need to add a photo? <a href="' + esc(R.formUrl) + '" target="_blank" rel="noopener">Use the full form</a>.' : '');
+      paintReq();
+      showSheet('reqSheet');
+    }
+    function paintReq() {
+      var R = D.request || { machines: [], priorities: [], impacts: [] };
+      chips('rMachine', R.machines || [], {}, 'machine', reqForm, paintReq);
+      pickList('rPrio', R.priorities || [], 'priority');
+      pickList('rImpact', R.impacts || [], 'impact');
+    }
+    function pickList(id, list, field) {
+      var box = document.getElementById(id); box.innerHTML = '';
+      list.forEach(function (v, i) {
+        var b = document.createElement('button'); b.type = 'button'; b.textContent = v; b.setAttribute('data-i', i);
+        if (reqForm[field] === v) b.className = 'active';
+        b.onclick = function () { reqForm[field] = v; paintReq(); };
+        box.appendChild(b);
+      });
+    }
+    function sendReq() {
+      var by = document.getElementById('rBy').value.trim(), desc = document.getElementById('rDesc').value.trim();
+      if (!by) { toast('Type your name.', true); return; }
+      if (!reqForm.machine) { toast('Pick the machine.', true); return; }
+      if (!desc) { toast('Describe the problem.', true); return; }
+      if (!reqForm.priority) { toast('Pick the priority.', true); return; }
+      if (!reqForm.impact) { toast('Pick how production is affected.', true); return; }
+      store('set', REQ_NAME_KEY, by);
+      call('submitRepairRequest', { by: by, machine: reqForm.machine, priority: reqForm.priority, impact: reqForm.impact, description: desc },
+        document.getElementById('reqGo'), function () {
+          closeSheets(); filter = 'REPAIRS'; if (!IS_DIALOG) store('set', FILTER_KEY, filter); setFilterButtons();
+        });
     }
 
     // ---------- mark done ----------
@@ -583,7 +666,7 @@
     }
     function closeSheets() {
       editing = null; finishing = null;
-      ['shade', 'editSheet', 'doneSheet'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
+      ['shade', 'editSheet', 'doneSheet', 'reqSheet'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
     }
     function fillInitials(id) {
       var sel = document.getElementById(id), cur = sel.value || store('get', OPER_KEY) || '';
