@@ -2,6 +2,8 @@
 <html>
 <head>
 
+
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>TEST To Do</title>
@@ -22,14 +24,14 @@
       --border: #d5dbe5; --border-soft: #e4e8ef; --panel: #f3f5f8;
       --green: #458f46; --green-dark: #3a7a3b; --green-soft: #e9f4ea;
       --amber: #b45309; --amber-soft: #fff4e5; --red: #c62828; --red-soft: #fdecec;
-      --blue: #1d4ed8; --blue-soft: #e8efff; --orange: #e8710a; --slate: #475569; --slate-soft: #eef1f5;
+      --blue: #1d4ed8; --blue-soft: #e8efff; --page: #dfe4ec; --orange: #e8710a; --slate: #475569; --slate-soft: #eef1f5;
     }
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    html, body { margin: 0; background: var(--panel); color: var(--text); }
+    html, body { margin: 0; background: var(--page); color: var(--text); }
     html { -webkit-text-size-adjust: 100%; }
     body { padding-top: env(safe-area-inset-top); overscroll-behavior-y: none; }
     button { -webkit-tap-highlight-color: transparent; }
-    .top { background: #fff; padding: 22px 20px 16px; border-bottom: 1px solid var(--border-soft); }
+    .top { background: #fff; padding: 22px 20px 0; border-bottom: 1px solid #c9d1dd; }
     .wrap { max-width: 600px; margin: 0 auto; }
     h1 { margin: 0; font-size: 26px; font-weight: 750; color: var(--navy); display: flex; align-items: center; gap: 10px; padding-right: 52px; }
     h1 .logo { width: 1.5em; height: 1.5em; flex: none; }
@@ -44,8 +46,28 @@
     .seg button .cnt { display: inline-block; min-width: 20px; margin-left: 5px; padding: 1px 6px; border-radius: 999px; background: var(--panel); color: var(--navy); font-size: 12.5px; font-weight: 750; line-height: 17px; }
     .seg button.active .cnt { background: rgba(255,255,255,.22); color: #fff; }
     .seg button .cnt.hot { background: var(--orange); color: #fff; }
-    #filterSeg button { flex: 1 1 auto; padding: 10px 4px; font-size: 13.5px; white-space: nowrap; }
-    #filterSeg button .cnt { margin-left: 4px; padding: 1px 5px; min-width: 18px; }
+    /* folder-style tabs; the open one grows and joins the list below */
+    .tabs { display: flex; align-items: flex-end; gap: 4px; margin-top: 14px; margin-bottom: -1px; overflow-x: auto; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tabs button { flex: 1 1 auto; border: 1px solid #c9d1dd; border-bottom: 0; border-radius: 10px 10px 0 0;
+      background: #edf0f5; color: var(--muted); padding: 7px 6px 6px; font-size: 13px; font-weight: 650; white-space: nowrap; cursor: pointer;
+      transition: padding .15s, font-size .15s, background .15s; }
+    .tabs button:hover { background: #f5f7fa; color: var(--navy); }
+    .tabs button.active { background: var(--page); color: var(--navy); font-size: 15px; font-weight: 750; padding: 11px 8px 9px;
+      border-color: #c9d1dd; position: relative; z-index: 1; }
+    .tabs button .cnt { display: inline-block; min-width: 18px; margin-left: 4px; padding: 1px 5px; border-radius: 999px; background: #dde3eb; color: var(--navy); font-size: 11.5px; font-weight: 750; line-height: 16px; }
+    .tabs button.active .cnt { background: var(--navy); color: #fff; }
+    .tabs button .cnt.hot { background: var(--orange); color: #fff; }
+    .tabs button[data-f="REPAIRS"] { color: #9a3412; }
+    .tabs button[data-f="REPAIRS"].active { color: #9a3412; }
+    .addBtn.top2 { margin-top: 12px; }
+    @media (max-width: 480px) {
+      .top { padding-left: 12px; padding-right: 12px; }
+      .tabs { gap: 3px; }
+      .tabs button { padding: 7px 3px 6px; font-size: 12px; }
+      .tabs button.active { padding: 10px 5px 8px; font-size: 13.5px; }
+      .tabs button .cnt { margin-left: 3px; padding: 0 4px; min-width: 15px; font-size: 10.5px; }
+    }
     .addBtn { width: 100%; height: 50px; margin-top: 14px; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; }
 
     .list { padding: 12px 20px 30px; }
@@ -56,6 +78,18 @@
     .card.urgent { border-left-color: var(--red); }
     .card.waiting { border-left-color: #94a3b8; }
     .card.old14 { border-left-color: #f59e0b; } .card.old30 { border-left-color: var(--red); }
+    /* repair requests: same colors as their row on the Repair Request sheet */
+    .card.rq-crit { background: #ffe8e8; border-color: #f3c4c4; }
+    .card.rq-urg  { background: #fffcd7; border-color: #efe3a0; }
+    .card.rq-rout { background: #e3f0dd; border-color: #c6dcbc; }
+    .card.rq-prog { background: #fff8a8; border-color: #e8d96a; }
+    .card.rq-done { background: #c9f7c9; border-color: #9fdf9f; }
+    .card.rq-crit, .card.rq-urg, .card.rq-rout, .card.rq-prog { border-left-color: #c9a227; }
+    .card.rq-rout { border-left-color: #6aa84f; }
+    .card.rq-crit.urgent, .card.urgent[class*="rq-"] { border-left-color: var(--red); border-left-width: 6px; }
+    .card[class*="rq-"] .tag { background: rgba(255,255,255,.7); }
+    .card[class*="rq-"] .notes { background: rgba(255,255,255,.6); }
+    .t-req { background: #fff1e6 !important; color: #9a3412; }
     .card.flash { background: #fff7ed; box-shadow: 0 0 0 3px rgba(232,113,10,.45); }
     .row1 { display: flex; gap: 9px; align-items: flex-start; }
     .num { flex: none; min-width: 19px; height: 19px; border-radius: 10px; background: var(--orange); color: #fff; font-weight: 750; font-size: 11px; display: flex; align-items: center; justify-content: center; padding: 0 5px; margin-top: 3px; }
@@ -126,13 +160,16 @@
     @media (min-width: 820px) {
       html, body { height: 100%; }
       body { display: flex; flex-direction: column; overflow: hidden; }
-      .top { flex: none; padding: 14px 20px 12px; }
+      .top { flex: none; padding: 14px 20px 0; }
       .top .wrap, .main { max-width: 1100px; }
       .sub { display: none; }
       .headRow { display: flex; align-items: baseline; gap: 16px; }
-      .ctrlRow { display: flex; gap: 12px; align-items: center; margin-top: 10px; }
-      .ctrlRow .seg { flex: 1; margin-top: 0; }
-      .ctrlRow .addBtn { width: 190px; margin-top: 0; height: 42px; font-size: 15.5px; }
+      .top .wrap { position: relative; }
+      .addBtn.top2 { position: absolute; right: 0; top: 0; width: 190px; margin-top: 0; height: 42px; font-size: 15.5px; }
+      body:not(.dialog) .addBtn.top2 { right: 56px; }
+      .tabs { margin-top: 12px; }
+      .tabs button { flex: 0 1 auto; padding: 7px 16px 6px; }
+      .tabs button.active { padding: 11px 20px 9px; }
       .main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 300px; margin: 0 auto; width: 100%; }
       .main .list { overflow-y: auto; min-height: 0; }
       .index { display: block; overflow-y: auto; min-height: 0; padding: 12px 14px 30px 4px; border-left: 1px solid var(--border-soft); }
@@ -149,14 +186,13 @@
     <p class="sub">Each press has its own list. Top gets done first. Use <b>▲ ▼</b> to change the order. Checking a task off writes it to the LOG.</p>
     <div class="sum" id="sum">Loading…</div>
     </div>
-    <div class="ctrlRow">
-    <div class="seg" id="filterSeg">
+    <button type="button" class="addBtn top2" onclick="openAdd()">＋ Add a task</button>
+    <div class="tabs" id="filterSeg">
       <button type="button" data-f="ALL" class="active">All<span class="cnt" id="c-ALL"></span></button>
       <button type="button" data-f="640LS">640LS<span class="cnt" id="c-640LS"></span></button>
       <button type="button" data-f="EXPRESS">Express<span class="cnt" id="c-EXPRESS"></span></button>
       <button type="button" data-f="PRESSROOM">Pressroom<span class="cnt" id="c-PRESSROOM"></span></button>
-    </div>
-    <button type="button" class="addBtn" onclick="openAdd()">＋ Add a task</button>
+      <button type="button" data-f="REPAIRS">🔧 Repairs<span class="cnt" id="c-REPAIRS"></span></button>
     </div>
   </div></div>
 
@@ -288,11 +324,14 @@
     window.appCanRefresh = canRefresh;
 
     // ---------- list ----------
-    var PRESS_ORDER = ['640LS', 'EXPRESS', 'PRESSROOM'];
-    // Each press has its own numbered list. "All" shows the three lists one after another.
+    var PRESS_ORDER = ['640LS', 'EXPRESS', 'PRESSROOM', 'REPAIRS'];
+    PRESS_LABEL.REPAIRS = 'Repair requests';
+    // Which list a task is on: repair requests have their own list, everything else is by press.
+    function listOf(t) { return t.req ? 'REPAIRS' : t.press; }
+    // Each list has its own numbers. "All" shows the lists one after another.
     function groups() {
-      var presses = filter === 'ALL' ? PRESS_ORDER : [filter];
-      return presses.map(function (p) { return { press: p, items: D.tasks.filter(function (t) { return t.press === p; }) }; });
+      var lists = filter === 'ALL' ? PRESS_ORDER : [filter];
+      return lists.map(function (p) { return { press: p, items: D.tasks.filter(function (t) { return listOf(t) === p; }) }; });
     }
     function ageDays(t) { return t.created ? Math.max(0, Math.floor((D.now - t.created) / 864e5)) : null; }
     function fmtDate(ms) { var d = new Date(ms); return (d.getMonth() + 1) + '/' + d.getDate(); }
@@ -305,8 +344,8 @@
         : 'Nothing on the list 🎉';
 
       // task counts on the filter buttons
-      var cnt = { ALL: D.tasks.length, '640LS': 0, EXPRESS: 0, PRESSROOM: 0 };
-      D.tasks.forEach(function (t) { if (cnt[t.press] !== undefined) cnt[t.press]++; });
+      var cnt = { ALL: D.tasks.length, '640LS': 0, EXPRESS: 0, PRESSROOM: 0, REPAIRS: 0 };
+      D.tasks.forEach(function (t) { if (cnt[listOf(t)] !== undefined) cnt[listOf(t)]++; });
       Object.keys(cnt).forEach(function (k) {
         var el = document.getElementById('c-' + k);
         if (el) { el.textContent = cnt[k]; el.classList.toggle('hot', cnt[k] > 0 && k !== filter); }
@@ -333,7 +372,7 @@
       if (!any) index.innerHTML = '<div class="empty" style="padding:10px">No open tasks.</div>';
 
       var dw = document.getElementById('doneWrap');
-      var dv = D.done.filter(function (t) { return filter === 'ALL' || t.press === filter; });
+      var dv = D.done.filter(function (t) { return filter === 'ALL' || listOf(t) === filter; });
       dw.style.display = dv.length ? 'block' : 'none';
       document.getElementById('doneTitle').textContent = 'Finished in the last 7 days (' + dv.length + ')';
       document.getElementById('doneArrow').textContent = showDone ? '▾' : '▸';
@@ -347,6 +386,7 @@
       var days = ageDays(t);
       var c = document.createElement('div');
       var cls = 'card';
+      if (t.req) cls += ' ' + reqClass(t);
       if (t.urgent) cls += ' urgent';
       else if (days >= 30) cls += ' old30';
       else if (days >= 14) cls += ' old14';
@@ -354,7 +394,10 @@
       c.className = cls;
       c.id = 'card-' + t.id;
 
-      var tags = '<span class="tag">' + (TYPE_LABEL[t.type] || t.type) + '</span>';
+      var tags = t.req
+        ? '<span class="tag t-req">' + esc(t.reqMachine || PRESS_LABEL[t.press]) + '</span>' +
+          '<span class="tag">' + esc(t.reqStatus || 'Open') + (t.reqAck ? ' · ' + esc(t.reqAck) : '') + '</span>'
+        : '<span class="tag">' + (TYPE_LABEL[t.type] || t.type) + '</span>';
       if (t.status !== 'OPEN') tags += '<span class="tag t-wait">' + esc(STATUS_LABEL[t.status] || t.status) + '</span>';
       if (t.urgent) tags += '<span class="tag t-urgent">🔴 Urgent</span>';
       if (days >= 30) tags += '<span class="tag t-age30">⚠ ' + days + ' days old</span>';
@@ -407,9 +450,17 @@
       return r;
     }
 
+    // Card color = the request's row color on the Repair Request sheet
+    function reqClass(t) {
+      var s = String(t.reqStatus || 'Open').toLowerCase(), p = String(t.reqPriority || '').toLowerCase();
+      if (s === 'resolved') return 'rq-done';
+      if (s === 'in progress') return 'rq-prog';
+      return p === 'critical' ? 'rq-crit' : p === 'urgent' ? 'rq-urg' : 'rq-rout';
+    }
+
     function doneCard(t) {
       var c = document.createElement('div');
-      c.className = 'card fin';
+      c.className = 'card fin' + (t.req ? ' rq-done' : '');
       c.innerHTML = '<div class="row1"><div class="num" style="background:var(--green)">✓</div><div class="task"></div></div>' +
         '<div class="row2"><div class="info"><div class="tags"><span class="tag t-press">' + PRESS_LABEL[t.press] + '</span><span class="tag">' + (TYPE_LABEL[t.type] || t.type) + '</span></div>' +
         '<div class="meta">Done ' + fmtDate(t.doneOn) + (t.doneBy ? ' by ' + esc(t.doneBy) : '') + ' · added ' + (t.created ? fmtDate(t.created) : '') + (t.by ? ' by ' + esc(t.by) : '') + '</div></div></div>' +
@@ -443,7 +494,7 @@
     function openAdd() {
       editing = null;
       form = { press: store('get', PRESS_KEY) || D.defaultPress || '640LS', type: 'OTHER', status: 'OPEN' };
-      if (filter !== 'ALL') form.press = filter;
+      if (filter !== 'ALL' && filter !== 'REPAIRS') form.press = filter;
       document.getElementById('editTitle').textContent = 'Add a task';
       document.getElementById('editGo').textContent = 'Add task';
       document.getElementById('fTask').value = '';
