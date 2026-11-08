@@ -9,6 +9,7 @@
 
 
 
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Pressroom To Do</title>
@@ -198,11 +199,15 @@
     body.dialog h1 { padding-right: 0; }
     body.dialog .sheet { max-height: 100vh; }
     /* request form: same grey as the window so the white fields stand out */
-    #reqSheet { background: var(--page); }
+    /* all pop-up forms: same grey as the window so the white fields stand out */
+    .sheet { background: var(--page); }
     #reqSheet h2 { color: #9a3412; }
-    #reqSheet textarea, #reqSheet input[type=text], #reqSheet .chips button, #reqSheet .pick button { background: #fff; border-color: #c9d1dd; }
-    #reqSheet .pick button.active, #reqSheet .chips button.active { border-color: var(--navy); }
-    #reqSheet .chips button.active { background: var(--navy); }
+    .sheet textarea, .sheet input[type=text], .sheet select, .sheet .chips button, .sheet .pick button,
+    .sheet .seg button, .sheet .btnCancel, .sheet .btnDel { background: #fff; border-color: #c9d1dd; }
+    .sheet .seg { border-color: #c9d1dd; }
+    .sheet .seg button.active, .sheet .chips button.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .sheet .pick button.active { border-color: var(--navy); }
+    .sheet .doneTask { background: #fff; }
   </style>
 </head>
 <body>
