@@ -11,6 +11,7 @@
 
 
 
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>TEST To Do</title>
@@ -509,25 +510,12 @@
       return r;
     }
 
-    // Repair requests: the card title is shortened; "▾ Show full description" opens the whole thing
-    var expanded = {};
+    // Repair requests: always show the whole description on the card (it just grows to fit)
     function addMore(c, t) {
       var full = String(t.reqDesc || '').trim();
-      var title = c.querySelector('.task');
-      var shown = t.task.replace(/^(REQ #\d+|New request)\s*–\s*/, '');
-      if (!full || full.replace(/\s+/g, ' ') === shown) return;          // nothing more to show
+      if (!full) return;
       var prefix = (t.task.match(/^(REQ #\d+|New request)\s*–\s*/) || [''])[0];
-      var btn = document.createElement('button');
-      btn.type = 'button'; btn.className = 'moreBtn';
-      function paint() {
-        var open = !!expanded[t.id];
-        title.textContent = open ? prefix + full : t.task;
-        title.style.whiteSpace = open ? 'pre-wrap' : '';
-        btn.textContent = open ? '▴ Show less' : '▾ Show full description';
-      }
-      btn.onclick = function () { expanded[t.id] = !expanded[t.id]; paint(); };
-      c.querySelector('.row2 .info').appendChild(btn);
-      paint();
+      c.querySelector('.task').textContent = prefix + full;
     }
 
     // Card color = the request's row color on the Repair Request sheet
