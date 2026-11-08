@@ -6,6 +6,9 @@
 
 
 
+
+
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>TEST To Do</title>
@@ -49,19 +52,25 @@
     .seg button.active .cnt { background: rgba(255,255,255,.22); color: #fff; }
     .seg button .cnt.hot { background: var(--orange); color: #fff; }
     /* folder-style tabs; the open one grows and joins the list below */
-    .tabs { display: flex; align-items: flex-end; gap: 4px; margin-top: 14px; margin-bottom: -1px; overflow-x: auto; scrollbar-width: none; }
-    .tabs::-webkit-scrollbar { display: none; }
-    .tabs button { flex: 1 1 auto; border: 1px solid #c9d1dd; border-bottom: 0; border-radius: 10px 10px 0 0;
-      background: #edf0f5; color: var(--muted); padding: 7px 6px 6px; font-size: 13px; font-weight: 650; white-space: nowrap; cursor: pointer;
-      transition: padding .15s, font-size .15s, background .15s; }
+    /* folder-style tabs: every tab is the same width, the row never changes height,
+       and the open tab grows upward smoothly (nothing below it moves) */
+    .tabs { display: flex; align-items: flex-end; gap: 4px; height: 46px; margin-top: 12px; margin-bottom: -1px; }
+    .tabs button { flex: 1 1 auto; min-width: 0; height: 36px; border: 1px solid #c9d1dd; border-bottom: 0; border-radius: 10px 10px 0 0;
+      background: #edf0f5; color: var(--muted); padding: 0 4px; font-size: 13.5px; font-weight: 650; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis; cursor: pointer;
+      transition: height .2s ease, background-color .2s ease, color .2s ease, box-shadow .2s ease; }
     .tabs button:hover { background: #f5f7fa; color: var(--navy); }
-    .tabs button.active { background: var(--page); color: var(--navy); font-size: 15px; font-weight: 750; padding: 11px 8px 9px;
-      border-color: #c9d1dd; position: relative; z-index: 1; }
-    .tabs button .cnt { display: inline-block; min-width: 18px; margin-left: 4px; padding: 1px 5px; border-radius: 999px; background: #dde3eb; color: var(--navy); font-size: 11.5px; font-weight: 750; line-height: 16px; }
+    .tabs button.active { height: 46px; background: var(--page); color: var(--navy);
+      box-shadow: 0 -2px 6px rgba(15,23,42,.06); position: relative; z-index: 1; }
+    .tabs button .cnt { display: inline-block; min-width: 18px; margin-left: 4px; padding: 1px 5px; border-radius: 999px; background: #dde3eb; color: var(--navy); font-size: 11.5px; font-weight: 750; line-height: 16px; transition: background-color .2s, color .2s; }
     .tabs button.active .cnt { background: var(--navy); color: #fff; }
     .tabs button .cnt.hot { background: var(--orange); color: #fff; }
     .tabs button[data-f="REPAIRS"] { color: #9a3412; }
     .tabs button[data-f="REPAIRS"].active { color: #9a3412; }
+    /* list fades in when you switch tabs instead of snapping */
+    #list.fade { animation: listIn .22s ease; }
+    @keyframes listIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    #list { min-height: 60vh; }
     .btnRow { display: flex; gap: 10px; margin-top: 12px; }
     .btnRow .addBtn { margin-top: 0; flex: 1; }
     .reqBtn { background: #fff !important; color: #9a3412 !important; border: 2px solid #f0c4a4 !important; }
@@ -75,9 +84,9 @@
     .pick.prio button[data-i="2"].active { background: #e3f0dd; box-shadow: 0 0 0 2px #6aa84f inset; border-color: #6aa84f; }
     @media (max-width: 480px) {
       .top { padding-left: 12px; padding-right: 12px; }
-      .tabs { gap: 3px; }
-      .tabs button { padding: 7px 2px 6px; font-size: 11.5px; }
-      .tabs button.active { padding: 10px 4px 8px; font-size: 13px; }
+      .tabs { gap: 3px; height: 42px; }
+      .tabs button { height: 33px; padding: 0 2px; font-size: 12px; }
+      .tabs button.active { height: 42px; }
       .tabs button .cnt { margin-left: 3px; padding: 0 4px; min-width: 15px; font-size: 10.5px; }
     }
     .addBtn { width: 100%; height: 50px; margin-top: 14px; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-size: 17px; font-weight: 700; cursor: pointer; }
@@ -180,16 +189,20 @@
       .btnRow { position: absolute; right: 0; top: 0; margin-top: 0; }
       .btnRow .addBtn { width: 180px; flex: none; height: 42px; font-size: 15px; }
       body:not(.dialog) .btnRow { right: 56px; }
-      .tabs { margin-top: 12px; }
-      .tabs button { flex: 0 1 auto; padding: 7px 16px 6px; }
-      .tabs button.active { padding: 11px 20px 9px; }
+      .tabs button { flex: 1 1 0; max-width: 175px; }
       .main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 300px; margin: 0 auto; width: 100%; }
-      .main .list { overflow-y: auto; min-height: 0; }
+      .main .list { overflow-y: auto; min-height: 0; width: 100%; max-width: 700px; }   /* full width so short lists aren't narrower */
       .index { display: block; overflow-y: auto; min-height: 0; padding: 12px 14px 30px 4px; border-left: 1px solid var(--border-soft); }
     }
     body.dialog .top { padding-top: 6px; }
     body.dialog h1 { padding-right: 0; }
     body.dialog .sheet { max-height: 100vh; }
+    /* request form: same grey as the window so the white fields stand out */
+    #reqSheet { background: var(--page); }
+    #reqSheet h2 { color: #9a3412; }
+    #reqSheet textarea, #reqSheet input[type=text], #reqSheet .chips button, #reqSheet .pick button { background: #fff; border-color: #c9d1dd; }
+    #reqSheet .pick button.active, #reqSheet .chips button.active { border-color: var(--navy); }
+    #reqSheet .chips button.active { background: var(--navy); }
   </style>
 </head>
 <body>
@@ -313,7 +326,7 @@
     window.onload = function () {
       setFilterButtons();
       document.querySelectorAll('#filterSeg button').forEach(function (b) {
-        b.onclick = function () { filter = b.getAttribute('data-f'); if (!IS_DIALOG) store('set', FILTER_KEY, filter); setFilterButtons(); render(); };
+        b.onclick = function () { filter = b.getAttribute('data-f'); if (!IS_DIALOG) store('set', FILTER_KEY, filter); setFilterButtons(); render(); fadeList(); };
       });
       document.querySelectorAll('#fPress button').forEach(function (b) {
         b.onclick = function () { form.press = b.getAttribute('data-v'); paintForm(); };
@@ -514,6 +527,12 @@
       return c;
     }
 
+    function fadeList() {
+      var l = document.getElementById('list');
+      l.classList.remove('fade'); void l.offsetWidth; l.classList.add('fade');
+      var col = document.getElementById('leftCol');
+      if (col && col.scrollHeight > col.clientHeight) col.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     function toggleDone() { showDone = !showDone; render(); }
 
     // ---------- reordering (moves right away on screen, then saves) ----------
