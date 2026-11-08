@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Safety Checklists</title>
+  <link rel="manifest" href="manifest-safety.json?v=1">
+  <!-- iOS 27 home-screen icon: built into the page, because iOS 27 won't download it -->
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/safety-192.png?v=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Safety">
+  <script src="config.js?v=3"></script>
+  <script src="app.js?v=4"></script>
+  <style>
+    :root {
+      --navy: #22355e; --text: #1f2937; --label: #3d4a5c; --muted: #6b7280;
+      --border: #d5dbe5; --border-soft: #e4e8ef; --panel: #f3f5f8; --edge: #c9d1dd;
+      --green: #458f46; --green-soft: #e3f0dd; --amber: #b45309; --amber-soft: #fff4e5;
+      --red: #c62828; --red-soft: #fdecec; --page: #dfe4ec; --orange: #e8710a; --slate: #475569;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    html, body { margin: 0; height: 100%; background: var(--page); color: var(--text); }
+    body { display: flex; flex-direction: column; overflow: hidden; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .top { flex: none; background: #fff; padding: 6px 20px 0; border-bottom: 1px solid var(--edge); }
+    .wrap { max-width: 780px; margin: 0 auto; }
+    .headRow { display: flex; align-items: baseline; gap: 16px; }
+    h1 { margin: 0; font-size: 24px; font-weight: 750; color: var(--navy); display: flex; align-items: center; gap: 10px; }
+    .sum { font-size: 14px; color: var(--muted); }
+
+    /* folder tabs, same as the To Do popup */
+    .tabs { display: flex; align-items: flex-end; gap: 4px; height: 46px; margin-top: 10px; margin-bottom: -1px; }
+    .tabs button { flex: 1 1 0; min-width: 0; height: 36px; border: 1px solid var(--edge); border-bottom: 0; border-radius: 10px 10px 0 0;
+      background: #edf0f5; color: var(--muted); padding: 0 6px; font-size: 13.5px; font-weight: 650; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis; cursor: pointer;
+      transition: height .2s ease, background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+    .tabs button:hover { background: #f5f7fa; color: var(--navy); }
+    .tabs button.active { height: 46px; background: var(--page); color: var(--navy); box-shadow: 0 -2px 6px rgba(15,23,42,.06); position: relative; z-index: 1; }
+    .tabs .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-left: 6px; vertical-align: 1px; background: #b8c2d0; }
+    .tabs .dot.ok { background: var(--green); } .tabs .dot.due { background: var(--orange); }
+
+    .main { flex: 1; min-height: 0; overflow-y: auto; }
+    .list { padding: 12px 20px 20px; }
+    #panel.fade { animation: listIn .22s ease; }
+    @keyframes listIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    .box { background: #fff; border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+    .grid .full { grid-column: 1 / -1; }
+    label.l { display: block; font-size: 13px; font-weight: 650; color: var(--label); margin: 8px 0 5px; }
+    label.l span { font-weight: 400; color: var(--muted); }
+    input[type=text], input[type=date], select, textarea { width: 100%; border: 1px solid var(--edge); border-radius: 10px; padding: 9px 11px; font-size: 15px; color: var(--text); background: #fff; outline: none; }
+    textarea { resize: vertical; min-height: 44px; }
+    input:focus, select:focus, textarea:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(34,53,94,.12); }
+    .seg { display: flex; border: 1px solid var(--edge); border-radius: 10px; overflow: hidden; background: #fff; }
+    .seg button { flex: 1; border: 0; background: #fff; padding: 9px 0; font-size: 14px; font-weight: 650; color: var(--navy); cursor: pointer; }
+    .seg button + button { border-left: 1px solid var(--edge); }
+    .seg button.active { background: var(--navy); color: #fff; }
+    .seg button .ck { color: var(--green); font-weight: 800; }
+    .seg button.active .ck { color: #b9f0b9; }
+
+    .last { font-size: 13px; color: var(--muted); margin-top: 10px; }
+    .last b { color: var(--text); }
+    .last.due b { color: var(--orange); }
+    .warn { font-size: 13px; color: var(--amber); background: var(--amber-soft); border-radius: 8px; padding: 6px 10px; margin-top: 8px; }
+
+    .bar { display: flex; align-items: center; gap: 10px; margin: 4px 2px 8px; }
+    .bar .prog { flex: 1; font-size: 13px; font-weight: 700; color: var(--label); }
+    .allOk { height: 32px; border-radius: 8px; border: 1px solid #b9d7b0; background: #fff; color: var(--green); font-size: 13.5px; font-weight: 700; padding: 0 12px; cursor: pointer; }
+    .clear { height: 32px; border-radius: 8px; border: 1px solid var(--edge); background: #fff; color: var(--muted); font-size: 13px; font-weight: 600; padding: 0 10px; cursor: pointer; }
+
+    .sec { font-size: 12.5px; font-weight: 750; letter-spacing: .04em; text-transform: uppercase; color: var(--label); margin: 12px 2px 6px; }
+    .q { background: #fff; border: 1px solid var(--border-soft); border-left: 5px solid var(--border); border-radius: 12px; padding: 9px 10px; margin-bottom: 7px; transition: border-color .2s, background .2s; }
+    .q.good { border-left-color: var(--green); }
+    .q.bad { border-left-color: var(--red); background: #fffafa; }
+    .q.na { border-left-color: #94a3b8; }
+    .q.miss { box-shadow: 0 0 0 2px rgba(232,113,10,.55); }
+    .qRow { display: flex; gap: 9px; align-items: flex-start; }
+    .num { flex: none; min-width: 19px; height: 19px; border-radius: 10px; background: var(--orange); color: #fff; font-weight: 750; font-size: 11px; display: flex; align-items: center; justify-content: center; padding: 0 5px; margin-top: 2px; }
+    .qt { flex: 1; min-width: 0; font-size: 14.5px; font-weight: 600; line-height: 1.32; padding-top: 1px; }
+    .ans { flex: none; display: flex; gap: 4px; }
+    .ans button { min-width: 50px; height: 32px; border-radius: 8px; border: 1px solid var(--edge); background: #fff; color: var(--label); font-size: 13.5px; font-weight: 700; padding: 0 9px; cursor: pointer; }
+    .ans button.on.g { background: var(--green); border-color: var(--green); color: #fff; }
+    .ans button.on.b { background: var(--red); border-color: var(--red); color: #fff; }
+    .ans button.on.n { background: var(--slate); border-color: var(--slate); color: #fff; }
+    .cm { margin: 7px 0 0 28px; display: none; }
+    .cm.show { display: block; }
+    .cm textarea { font-size: 14px; min-height: 40px; }
+    .cm textarea.need { border-color: var(--red); background: #fffafa; }
+
+    .foot { flex: none; background: #fff; border-top: 1px solid var(--edge); padding: 10px 20px; }
+    .foot .wrap { display: flex; gap: 10px; align-items: center; }
+    .foot .info { flex: 1; font-size: 13px; color: var(--muted); line-height: 1.35; }
+    .foot .info b { color: var(--text); }
+    .go { height: 46px; border: 0; border-radius: 12px; background: var(--green); color: #fff; font-size: 15.5px; font-weight: 700; padding: 0 18px; cursor: pointer; white-space: nowrap; }
+    .go.alt { background: #fff; color: var(--green); border: 2px solid #b9d7b0; }
+    .go:disabled { opacity: .5; cursor: default; }
+    .link { border: 0; background: none; color: var(--navy); font-size: 13px; font-weight: 650; text-decoration: underline; cursor: pointer; padding: 0; }
+
+    /* confirm sheet */
+    .shade { position: fixed; inset: 0; background: rgba(15,23,42,.45); display: none; z-index: 30; }
+    .sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 31; background: var(--page); border-radius: 18px 18px 0 0; padding: 18px 20px 20px; display: none; box-shadow: 0 -8px 30px rgba(0,0,0,.18); }
+    .sheet h2 { margin: 0 0 10px; font-size: 20px; color: var(--navy); }
+    .sheet .what { background: #fff; border-radius: 12px; padding: 10px 12px; font-size: 14.5px; line-height: 1.5; }
+    .sheet .what .bad { color: var(--red); font-weight: 700; }
+    .sheetBtns { display: flex; gap: 10px; margin-top: 14px; }
+    .sheetBtns button { height: 50px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    .btnCancel { flex: none; padding: 0 18px; border: 1px solid var(--edge); background: #fff; color: var(--muted); }
+    .btnGo { flex: 1; border: 0; background: var(--green); color: #fff; }
+    .btnGo:disabled { opacity: .6; cursor: default; }
+
+    .toast { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); max-width: 92%; z-index: 40;
+      background: var(--navy); color: #fff; padding: 12px 16px; border-radius: 12px; font-size: 14.5px; box-shadow: 0 6px 18px rgba(0,0,0,.18); display: none; }
+    .toast.err { background: var(--red); }
+    .empty { text-align: center; color: var(--muted); padding: 40px 10px; font-size: 15px; }
+    /* phone app: room for the ↻ button, notch / home-bar safe areas */
+    body.app .top { padding-top: calc(env(safe-area-inset-top) + 14px); }
+    body.app h1 { padding-right: 52px; }
+    body.app .foot { padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+    body.app .sheet { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+    .headRow { flex-wrap: wrap; row-gap: 2px; }
+    .tabs .sm { display: none; }
+    @media (max-width: 560px) {
+      .tabs .lg { display: none; } .tabs .sm { display: inline; }
+      .tabs { gap: 3px; } .tabs button { font-size: 13px; padding: 0 3px; }
+      h1 { font-size: 22px; } .sum { display: none; }
+      .list { padding: 10px 12px 20px; } .top, .foot { padding-left: 12px; padding-right: 12px; }
+      .ans button { flex: 1; height: 38px; }
+      .foot .wrap { flex-wrap: wrap; } .foot .info { flex-basis: 100%; }
+      #footBtns { display: flex; gap: 8px; width: 100%; } #footBtns .go { flex: 1; padding: 0 10px; }
+      .toast { bottom: 140px; }
+    }
+    @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } .qRow { flex-wrap: wrap; } .ans { width: calc(100% - 28px); margin-left: 28px; } }
+  </style>
+</head>
+<body>
+  <div class="top"><div class="wrap">
+    <div class="headRow">
+      <h1>🦺 Safety Checklists</h1>
+      <div class="sum" id="sum">Loading…</div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+  </div></div>
+
+  <div class="main" id="main"><div class="wrap list"><div id="panel"><div class="empty">Loading…</div></div></div></div>
+
+  <div class="foot"><div class="wrap">
+    <div class="info" id="footInfo"></div>
+    <span id="footBtns"></span>
+  </div></div>
+
+  <div class="shade" id="shade" onclick="closeSheet()"></div>
+  <div class="sheet" id="sheet"><div class="wrap">
+    <h2 id="cTitle">Send?</h2>
+    <div class="what" id="cWhat"></div>
+    <div class="sheetBtns">
+      <button type="button" class="btnCancel" onclick="closeSheet()">Back</button>
+      <button type="button" class="btnGo" id="cGo">📧 Send</button>
+    </div>
+  </div></div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var IS_DIALOG = /*IS_DIALOG*/false;
+    var TAB_KEY = 'safety_tab', AREA_KEY = 'safety_area';
+    var SHORT = { AREA: 'Area', MONTHLY: 'Monthly', ANNUAL: 'Annual', HAZ: 'Waste' };
+    var D = null;              // data from getSafetyData()
+    var cur = null;            // id of the open checklist
+    var S = {};                // in-progress answers per checklist
+    var busy = false;
+    var LIMIT = { AREA: 8, MONTHLY: 35, ANNUAL: 370, HAZ: 35 };   // days before "due" shows
+
+    if (!IS_DIALOG) document.body.classList.add('app');
+    window.onload = load;
+    // phone app: the ↻ button / auto-refresh only reloads when nothing is half filled in
+    window.appCanRefresh = function () { return !busy && !inProgress(); };
+    window.appRefreshData = function () { if (!busy && !inProgress()) load(); };
+    function inProgress() { for (var k in S) { var a = S[k].ans; for (var r in a) if (a[r]) return true; } return false; }
+    // the sheet popup starts on that sheet's press; the phone app remembers the last one picked
+    function homeArea() { var a = IS_DIALOG ? '' : store('get', AREA_KEY); return (a && D.areas.indexOf(a) >= 0) ? a : D.homeArea; }
+    function load() {
+      google.script.run.withSuccessHandler(function (d) { D = d; init(); })
+        .withFailureHandler(function (e) { document.getElementById('panel').innerHTML = '<div class="empty">' + esc(e.message || e) + '</div>'; })
+        .getSafetyData();
+    }
+
+    function init() {
+      D.lists.forEach(function (L) { if (!S[L.id]) S[L.id] = fresh(L); });
+      cur = cur || store('get', TAB_KEY) || 'AREA';
+      if (!D.lists.some(function (L) { return L.id === cur; })) cur = D.lists[0].id;
+      renderTabs(); render(); summary();
+    }
+
+    // a clean form, pre-filled with today, this press and the remembered names
+    function fresh(L) {
+      var t = new Date(), s = { ans: {}, cm: {} };
+      s.date = t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate());
+      s.area = homeArea();
+      s.name = store('get', 'safety_name_' + L.id) || store('get', 'safety_name') || '';
+      if (L.names && L.names.length && L.names.indexOf(s.name) < 0) s.name = '';
+      if (L.id === 'AREA') { s.sup = store('get', 'safety_sup_' + s.area) || L.supervisor || ''; s.issues = ''; }
+      if (L.kind === 'weekly') {
+        s.name = store('get', 'safety_name_HAZ') || L.inspector || '';
+        s.loc = store('get', 'safety_haz_loc') || L.location || '';
+        s.month = D.months[t.getMonth()];
+        s.week = Math.min(5, Math.ceil(t.getDate() / 7));
+      }
+      return s;
+    }
+    function list(id) { return D.lists.filter(function (L) { return L.id === (id || cur); })[0]; }
+
+    function renderTabs() {
+      var h = '';
+      D.lists.forEach(function (L) {
+        var st = L.missing ? '' : (isDue(L) ? 'due' : 'ok');
+        h += '<button type="button" data-id="' + L.id + '" class="' + (L.id === cur ? 'active' : '') + '"><span class="lg">' + esc(L.title) + '</span><span class="sm">' + esc(SHORT[L.id] || L.title) + '</span>' +
+             (st ? '<span class="dot ' + st + '" title="' + (st === 'due' ? 'Due' : 'Up to date') + '"></span>' : '') + '</button>';
+      });
+      var el = document.getElementById('tabs'); el.innerHTML = h;
+      el.querySelectorAll('button').forEach(function (b) {
+        b.onclick = function () {
+          if (b.getAttribute('data-id') === cur) return;
+          cur = b.getAttribute('data-id'); store('set', TAB_KEY, cur);
+          el.querySelectorAll('button').forEach(function (x) { x.classList.toggle('active', x === b); });
+          render(); fade(); document.getElementById('main').scrollTop = 0;
+        };
+      });
+    }
+    function summary() {
+      var due = D.lists.filter(function (L) { return !L.missing && isDue(L); }).map(function (L) { return L.title; });
+      document.getElementById('sum').innerHTML = due.length ? 'Due: <b style="color:var(--orange)">' + esc(due.join(' · ')) + '</b>' : 'All up to date ✓';
+    }
+    // the press shown on this sheet decides "due" for per-area lists
+    function lastFor(L, area) { return (L.last || {})[L.perArea ? (area || homeArea()) : ''] || null; }
+    function isDue(L) { var x = lastFor(L); return !x || (D.today - x.when) / 864e5 > LIMIT[L.id]; }
+
+    // ---------------- the form ----------------
+    function render() {
+      var L = list(), s = S[cur], h = '';
+      if (L.missing) { panel('<div class="empty">The <b>' + esc(L.title) + '</b> tab wasn\'t found on the 640LS sheet.</div>'); foot(); return; }
+
+      h += '<div class="box"><div class="grid">';
+      if (L.kind === 'weekly') {
+        h += field('Inspected by', '<input type="text" id="fName" maxlength="40" value="' + attr(s.name) + '" placeholder="Your name">');
+        h += field('Inspection location', '<input type="text" id="fLoc" maxlength="40" value="' + attr(s.loc) + '">');
+        h += field('Month', '<select id="fMonth">' + D.months.map(function (m) { return '<option' + (m === s.month ? ' selected' : '') + '>' + m + '</option>'; }).join('') + '</select>');
+        var done = (s.month === L.month) ? L.weeksDone : [];
+        h += field('Week', '<div class="seg" id="fWeek">' + [1, 2, 3, 4, 5].map(function (w) {
+          return '<button type="button" data-v="' + w + '" class="' + (s.week === w ? 'active' : '') + '">' + w + (done[w - 1] ? ' <span class="ck">✓</span>' : '') + '</button>';
+        }).join('') + '</div>');
+      } else {
+        h += field(L.id === 'AREA' ? 'Assessor' : 'Inspector', nameBox(L, s));
+        h += field('Date', '<input type="date" id="fDate" value="' + s.date + '">');
+        h += field('Press / area', '<div class="seg" id="fArea">' + D.areas.map(function (a) {
+          return '<button type="button" data-v="' + attr(a) + '" class="' + (s.area === a ? 'active' : '') + '">' + esc(short(a)) + '</button>';
+        }).join('') + '</div>');
+        if (L.id === 'AREA') h += field('Supervisor / Lead', '<input type="text" id="fSup" maxlength="40" value="' + attr(s.sup) + '">');
+      }
+      h += '</div>' + lastLine(L, s) + '</div>';
+
+      var opts = answerOpts(L);
+      h += '<div class="bar"><div class="prog" id="prog"></div>' +
+           '<button type="button" class="clear" onclick="clearAll()">Clear</button>' +
+           '<button type="button" class="allOk" onclick="allOk()">✓ Mark all ' + opts[0].t + '</button></div>';
+      var sec = null;
+      L.items.forEach(function (it) {
+        if (it.section && it.section !== sec) { sec = it.section; h += '<div class="sec">' + esc(sec) + '</div>'; }
+        h += '<div class="q" id="q' + it.row + '"><div class="qRow"><span class="num">' + esc(it.num) + '</span>' +
+             '<div class="qt">' + esc(it.q) + '</div><div class="ans">' +
+             opts.map(function (o) { return '<button type="button" data-r="' + it.row + '" data-v="' + o.v + '" class="' + o.c + '">' + o.t + '</button>'; }).join('') +
+             '</div></div><div class="cm" id="cm' + it.row + '"><textarea data-r="' + it.row + '" rows="1" maxlength="300"></textarea></div></div>';
+      });
+      if (L.id === 'AREA') h += '<div class="box" style="margin-top:12px"><label class="l" style="margin-top:0">Noted issue(s) <span>(optional — left blank, your N comments are used)</span></label>' +
+                                '<textarea id="fIssues" rows="2" maxlength="600">' + esc(s.issues) + '</textarea></div>';
+      panel(h);
+      wire(L, s);
+      L.items.forEach(function (it) { paintQ(L, it.row); });
+      foot();
+    }
+    function field(lbl, inner) { return '<div><label class="l">' + lbl + '</label>' + inner + '</div>'; }
+    function nameBox(L, s) {
+      if (!L.names || !L.names.length) return '<input type="text" id="fName" maxlength="40" value="' + attr(s.name) + '" placeholder="Your name">';
+      return '<select id="fName"><option value="">— pick your name —</option>' + L.names.map(function (n) {
+        return '<option' + (n === s.name ? ' selected' : '') + '>' + esc(n) + '</option>'; }).join('') + '</select>';
+    }
+    function lastLine(L, s) {
+      var x = lastFor(L, s.area), where = L.perArea ? ' for ' + esc(short(s.area)) : '';
+      var out;
+      if (!x) out = '<div class="last due">Last sent' + where + ': <b>not from this popup yet</b></div>';
+      else out = '<div class="last' + ((D.today - x.when) / 864e5 > LIMIT[L.id] ? ' due' : '') + '">Last sent' + where + ': <b>' +
+                 (x.month ? esc(x.month) + ' (on ' + fmt(x.sentAt) + ')' : fmt(x.when)) + '</b> by ' + esc(x.by) + '</div>';
+      if (L.kind === 'weekly' && L.month && s.month !== L.month) {
+        var sent = x && x.month && x.month.toUpperCase() === L.month;
+        out += '<div class="warn">The sheet still has <b>' + esc(L.month) + '</b>. Saving a ' + esc(s.month) + ' week clears it for the new month' +
+               (sent ? '.' : ' — and ' + esc(L.month) + ' was never sent from here. Switch the month back to send it first.') + '</div>';
+      }
+      return out;
+    }
+    function answerOpts(L) {
+      if (L.kind === 'yn') return [{ v: 'Y', t: 'Y', c: 'g' }, { v: 'N', t: 'N', c: 'b' }];
+      if (L.kind === 'tf') return [{ v: 'TRUE', t: 'True', c: 'g' }, { v: 'FALSE', t: 'False', c: 'b' }];
+      return [{ v: 'OK', t: 'Yes', c: 'g' }, { v: 'NO', t: 'No', c: 'b' }, { v: 'NA', t: 'N/A', c: 'n' }, { v: 'TBD', t: 'TBD', c: 'b' }];
+    }
+    function needsComment(v) { return v === 'N' || v === 'FALSE' || v === 'NO' || v === 'TBD'; }
+
+    function wire(L, s) {
+      var P = document.getElementById('panel');
+      P.querySelectorAll('.ans button').forEach(function (b) {
+        b.onclick = function () {
+          var r = b.getAttribute('data-r'), v = b.getAttribute('data-v');
+          s.ans[r] = (s.ans[r] === v) ? '' : v;
+          paintQ(L, r); foot();
+          if (needsComment(s.ans[r])) { var t = document.querySelector('#cm' + r + ' textarea'); if (t && !t.value) t.focus(); }
+        };
+      });
+      P.querySelectorAll('.cm textarea').forEach(function (t) {
+        var r = t.getAttribute('data-r'); t.value = s.cm[r] || '';
+        t.oninput = function () { s.cm[r] = t.value; t.classList.toggle('need', needsComment(s.ans[r]) && !t.value.trim()); foot(); };
+      });
+      on('fName', 'input', function (v) { s.name = v; }); on('fName', 'change', function (v) { s.name = v; foot(); });
+      on('fDate', 'change', function (v) { s.date = v; });
+      on('fSup', 'input', function (v) { s.sup = v; });
+      on('fIssues', 'input', function (v) { s.issues = v; });
+      on('fLoc', 'input', function (v) { s.loc = v; });
+      on('fMonth', 'change', function (v) { s.month = v; render(); });
+      segs('fArea', function (v) {
+        s.area = v; if (!IS_DIALOG) store('set', AREA_KEY, v);
+        if (L.id === 'AREA') s.sup = store('get', 'safety_sup_' + v) || s.sup;
+        render();
+      });
+      segs('fWeek', function (v) { s.week = +v; render(); });
+    }
+    function on(id, ev, fn) { var el = document.getElementById(id); if (el) el.addEventListener(ev, function () { fn(el.value); }); }
+    function segs(id, fn) { var el = document.getElementById(id); if (!el) return; el.querySelectorAll('button').forEach(function (b) { b.onclick = function () { fn(b.getAttribute('data-v')); }; }); }
+
+    function paintQ(L, r) {
+      var s = S[L.id], v = s.ans[r] || '', q = document.getElementById('q' + r);
+      if (!q) return;
+      q.querySelectorAll('.ans button').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-v') === v); });
+      q.classList.toggle('good', v === 'Y' || v === 'TRUE' || v === 'OK');
+      q.classList.toggle('bad', needsComment(v));
+      q.classList.toggle('na', v === 'NA');
+      q.classList.remove('miss');
+      var showC = needsComment(v) || v === 'NA' || !!(s.cm[r] || '').trim();
+      var cm = document.getElementById('cm' + r); cm.classList.toggle('show', showC);
+      var t = cm.querySelector('textarea');
+      t.placeholder = needsComment(v) ? (L.kind === 'tf' ? 'Required — exact location of the finding and the corrective action' : 'Required — what\'s wrong and where') : 'Comment (optional)';
+      t.classList.toggle('need', needsComment(v) && !t.value.trim());
+    }
+    function allOk() {
+      var L = list(), s = S[cur], v = answerOpts(L)[0].v;
+      L.items.forEach(function (it) { if (!s.ans[it.row]) s.ans[it.row] = v; paintQ(L, it.row); });
+      foot();
+    }
+    function clearAll() {
+      var L = list(); S[cur] = fresh(L); render();
+    }
+
+    // ---------------- footer: progress + send ----------------
+    function check() {
+      var L = list(), s = S[cur], miss = [], cm = [];
+      L.items.forEach(function (it) {
+        var v = s.ans[it.row];
+        if (!v) miss.push(it);
+        else if (needsComment(v) && !(s.cm[it.row] || '').trim()) cm.push(it);
+      });
+      return { L: L, s: s, miss: miss, cm: cm, n: L.items.length - miss.length };
+    }
+    function foot() {
+      var L = list(), info = document.getElementById('footInfo'), btns = document.getElementById('footBtns');
+      if (!L || L.missing) { info.innerHTML = ''; btns.innerHTML = ''; return; }
+      var c = check(), s = c.s;
+      var p = document.getElementById('prog');
+      if (p) p.textContent = c.n + ' of ' + L.items.length + ' answered' + (c.cm.length ? ' · ' + c.cm.length + ' need a comment' : '');
+      info.innerHTML = 'Fills the <b>' + esc(L.title) + '</b> tab and emails the PDF to the EHS list.';
+      if (L.kind === 'weekly') {
+        var mName = cap(s.month);
+        info.innerHTML = 'Save each week as you go. Send the month when it\'s finished. <button type="button" class="link" onclick="ask(\'sendOnly\')">Send ' + esc(mName) + ' as it is</button>';
+        btns.innerHTML = '<button type="button" class="go alt" onclick="ask(\'save\')"' + (busy ? ' disabled' : '') + '>Save week ' + s.week + '</button> ' +
+                         '<button type="button" class="go" onclick="ask(\'saveSend\')"' + (busy ? ' disabled' : '') + '>Save &amp; send ' + esc(mName) + '</button>';
+      } else {
+        btns.innerHTML = '<button type="button" class="go" onclick="ask(\'send\')"' + (busy ? ' disabled' : '') + '>📧 Send to EHS</button>';
+      }
+    }
+
+    function ask(mode) {
+      var c = check(), L = c.L, s = c.s;
+      if (L.kind === 'weekly') { s.name = val('fName', s.name); s.loc = val('fLoc', s.loc); }
+      else s.name = val('fName', s.name);
+      if (!String(s.name || '').trim()) return toast(L.kind === 'weekly' ? 'Type your name first.' : 'Pick your name first.', true, 'fName');
+      if (mode !== 'sendOnly') {
+        if (c.miss.length) { flag(c.miss); return toast('Answer every question — ' + c.miss.length + ' left.', true); }
+        if (c.cm.length) { flag(c.cm); return toast('A comment is needed where the answer is ' + (L.kind === 'yn' ? 'N' : L.kind === 'tf' ? 'False' : 'No / TBD') + '.', true); }
+      }
+      var bad = L.items.filter(function (it) { return needsComment(s.ans[it.row]); }).length;
+      var h = '';
+      if (L.kind === 'weekly') {
+        var mName = cap(s.month);
+        h += (mode !== 'sendOnly' ? 'Week <b>' + s.week + '</b> of <b>' + esc(mName) + '</b> goes on the sheet' + (bad ? ' — <span class="bad">' + bad + ' item' + (bad > 1 ? 's' : '') + ' with No/TBD</span>' : ' — all Yes / N/A') + '.<br>' : '');
+        if (mode !== 'save') h += 'Then <b>' + esc(mName) + '</b> is emailed as a PDF to:<br>' + esc(D.emailTo);
+        document.getElementById('cTitle').textContent = mode === 'save' ? 'Save week ' + s.week + '?' : 'Send ' + mName + '?';
+        document.getElementById('cGo').textContent = mode === 'save' ? 'Save week ' + s.week : '📧 Send';
+      } else {
+        var area = short(s.area);
+        h += '<b>' + esc(L.title) + '</b> — ' + esc(area) + ' — ' + esc(fmtIso(s.date)) + '<br>' +
+             (L.id === 'AREA' ? 'Assessor' : 'Inspector') + ': ' + esc(s.name) + '<br>' +
+             (bad ? '<span class="bad">' + bad + ' item' + (bad > 1 ? 's' : '') + ' marked ' + (L.kind === 'yn' ? 'N' : 'False') + '</span>' : 'Everything marked ' + (L.kind === 'yn' ? 'Y' : 'True')) +
+             '<br><br>Emailed as a PDF to:<br>' + esc(D.emailTo);
+        document.getElementById('cTitle').textContent = 'Send to EHS?';
+        document.getElementById('cGo').textContent = '📧 Send';
+      }
+      document.getElementById('cWhat').innerHTML = h;
+      var go = document.getElementById('cGo'); go.disabled = false; go.onclick = function () { send(mode); };
+      document.getElementById('shade').style.display = 'block'; document.getElementById('sheet').style.display = 'block';
+    }
+    function closeSheet() { if (busy) return; document.getElementById('shade').style.display = 'none'; document.getElementById('sheet').style.display = 'none'; }
+
+    function send(mode) {
+      var L = list(), s = S[cur], id = cur, go = document.getElementById('cGo');
+      var answers = L.items.map(function (it) { return { row: it.row, ans: s.ans[it.row] || '', comment: (s.cm[it.row] || '').trim() }; });
+      busy = true; go.disabled = true; go.textContent = mode === 'save' ? 'Saving…' : 'Making the PDF & sending…'; foot();
+      var done = function (msg) {
+        busy = false; closeSheet();
+        // remember who did it (and the supervisor / location)
+        store('set', 'safety_name_' + id, s.name); if (L.kind !== 'weekly') store('set', 'safety_name', s.name);
+        if (id === 'AREA') store('set', 'safety_sup_' + s.area, s.sup || '');
+        if (L.kind === 'weekly') store('set', 'safety_haz_loc', s.loc || '');
+        toast(msg || '✅ Done', false);
+        var keepWeek = s.week, keepMonth = s.month;
+        google.script.run.withSuccessHandler(function (d) {
+          D = d; S[id] = fresh(list(id));
+          D.lists.forEach(function (X) { if (S[X.id] && !S[X.id].name && X.kind !== 'weekly') S[X.id].name = fresh(X).name; });
+          if (L.kind === 'weekly' && mode === 'save') { S[id].month = keepMonth; S[id].week = Math.min(5, keepWeek + 1); }
+          renderTabs(); render(); summary(); document.getElementById('main').scrollTop = 0;
+        }).getSafetyData();
+      };
+      var fail = function (e) { busy = false; go.disabled = false; go.textContent = 'Try again'; foot(); toast(e.message || String(e), true); };
+      if (L.kind === 'weekly') {
+        google.script.run.withSuccessHandler(done).withFailureHandler(fail).saveHazWeek({
+          name: s.name, location: s.loc, month: s.month, week: s.week, answers: answers,
+          send: mode === 'saveSend', sendOnly: mode === 'sendOnly' });
+      } else {
+        google.script.run.withSuccessHandler(done).withFailureHandler(fail).submitSafety({
+          id: id, name: s.name, date: s.date, area: s.area, supervisor: (s.sup || '').trim(), issues: (s.issues || '').trim(), answers: answers });
+      }
+    }
+
+    // ---------------- little helpers ----------------
+    function flag(items) {
+      items.forEach(function (it) { var q = document.getElementById('q' + it.row); if (q) q.classList.add('miss'); });
+      var q = document.getElementById('q' + items[0].row); if (q) q.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function val(id, d) { var el = document.getElementById(id); return el ? el.value : d; }
+    function panel(h) { document.getElementById('panel').innerHTML = h; }
+    function fade() { var p = document.getElementById('panel'); p.classList.remove('fade'); void p.offsetWidth; p.classList.add('fade'); }
+    function short(a) { a = String(a || '').replace(/^PRESSROOM\s*\/\s*/i, ''); return /EXPRESS/i.test(a) ? 'Express' : a; }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function cap(m) { m = String(m || ''); return m.charAt(0) + m.slice(1).toLowerCase(); }
+    function fmt(ms) { var d = new Date(ms); return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear(); }
+    function fmtIso(s) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? (+m[2]) + '/' + (+m[3]) + '/' + m[1] : s; }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function attr(s) { return esc(s).replace(/'/g, '&#39;'); }
+    function store(op, k, v) {
+      try { if (op === 'get') return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) {}
+      return null;
+    }
+    var tT;
+    function toast(t, err, focusId) {
+      var el = document.getElementById('toast'); el.textContent = t; el.className = 'toast' + (err ? ' err' : ''); el.style.display = 'block';
+      clearTimeout(tT); tT = setTimeout(function () { el.style.display = 'none'; }, err ? 5000 : 4000);
+      if (focusId) { var f = document.getElementById(focusId); if (f) f.focus(); }
+    }
+  </script>
+</body>
+</html>
