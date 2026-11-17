@@ -210,6 +210,13 @@
         s.loc = store('get', 'safety_haz_loc') || L.location || '';
         s.month = D.months[t.getMonth()];
         s.week = Math.min(5, Math.ceil(t.getDate() / 7));
+        // last month's sheet is filled in but never sent? open on that month, ready to send
+        var x = lastFor(L), sentM = x && x.month ? String(x.month).toUpperCase() : '';
+        if (L.month && L.month !== s.month && sentM !== L.month && (L.weeksDone || []).some(Boolean)) {
+          s.month = L.month;
+          var nx = L.weeksDone.indexOf(false);
+          s.week = nx < 0 ? 5 : nx + 1;
+        }
       }
       return s;
     }
@@ -381,9 +388,17 @@
       info.innerHTML = 'Fills the <b>' + esc(L.title) + '</b> tab and emails the PDF to the EHS list.';
       if (L.kind === 'weekly') {
         var mName = cap(s.month);
-        info.innerHTML = 'Save each week as you go. Send the month when it\'s finished. <button type="button" class="link" onclick="ask(\'sendOnly\')">Send ' + esc(mName) + ' as it is</button>';
-        btns.innerHTML = '<button type="button" class="go alt" onclick="ask(\'save\')"' + (busy ? ' disabled' : '') + '>Save week ' + s.week + '</button> ' +
-                         '<button type="button" class="go" onclick="ask(\'saveSend\')"' + (busy ? ' disabled' : '') + '>Save &amp; send ' + esc(mName) + '</button>';
+        var dis = busy ? ' disabled' : '';
+        if (c.n === 0) {
+          // nothing answered for this week -> send the month exactly as it's saved on the sheet
+          info.innerHTML = 'Save each week as you go. When the month is done, send it — empty weeks are fine.';
+          btns.innerHTML = '<button type="button" class="go alt" onclick="ask(\'save\')"' + dis + '>Save week ' + s.week + '</button> ' +
+                           '<button type="button" class="go" onclick="ask(\'sendOnly\')"' + dis + '>📧 Send ' + esc(mName) + '</button>';
+        } else {
+          info.innerHTML = 'Save each week as you go. <button type="button" class="link" onclick="ask(\'sendOnly\')">Send ' + esc(mName) + ' without week ' + s.week + '</button>';
+          btns.innerHTML = '<button type="button" class="go alt" onclick="ask(\'save\')"' + dis + '>Save week ' + s.week + '</button> ' +
+                           '<button type="button" class="go" onclick="ask(\'saveSend\')"' + dis + '>Save &amp; send ' + esc(mName) + '</button>';
+        }
       } else {
         btns.innerHTML = '<button type="button" class="go" onclick="ask(\'send\')"' + (busy ? ' disabled' : '') + '>📧 Send to EHS</button>';
       }
